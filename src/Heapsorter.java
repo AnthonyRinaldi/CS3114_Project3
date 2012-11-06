@@ -14,6 +14,12 @@ public class HeapSorter
 	 * The time it took for the last sort in milliseconds.
 	 */
 	private long time = -1;
+	/**
+	 * This {@code HeapSorter's} {@link RecordCollection}, which interfaces
+	 * between this class and a storage medium, such as a specialized array or
+	 * buffer pool.
+	 */
+	private RecordCollection<HeapRecord> collection;
 
 	// ----------------------------------------------------------
 	/**
