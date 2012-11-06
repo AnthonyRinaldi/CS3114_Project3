@@ -11,9 +11,9 @@ public class HeapSorter
 {
 
 	/**
-	 * The time it took for the last sort in milliseconds
+	 * The time it took for the last sort in milliseconds.
 	 */
-	long time = -1;
+	private long time = -1;
 
 	// ----------------------------------------------------------
 	/**
