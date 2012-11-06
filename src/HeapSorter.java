@@ -29,18 +29,12 @@ public class HeapSorter
 	 */
 	public HeapSorter(RecordCollection<HeapRecord> collection)
 	{
-		// Get the initial time
-		long startTime = System.currentTimeMillis();
+		this.collection = collection;
 		/*
 		 MaxHeap H = new MaxHeap(input, input.length(), input.length());
 		 for (int i=0; i < input.length(); i++)  // Sort
 		 H.removemax(); // Removemax places max at end of heap
 		 */
-		// Get the end time
-		long endTime = System.currentTimeMillis();
-		// Calculate the total time
-		time = endTime - startTime;
-
 	}
 
 	// ----------------------------------------------------------
@@ -50,7 +44,7 @@ public class HeapSorter
 	 * <p/>
 	 * @return The sort time
 	 */
-	public long lastSortTime()
+	public long getSortTime()
 	{
 		return time;
 	}
@@ -59,6 +53,15 @@ public class HeapSorter
     public void sort()
     {
         // TODO Auto-generated method stub
-
+		
+		// Get the initial time
+		long startTime = System.currentTimeMillis();
+		
+		//sorting stuff here
+		
+		// Get the end time
+		long endTime = System.currentTimeMillis();
+		// Calculate the total time
+		time = endTime - startTime;
     }
 }
