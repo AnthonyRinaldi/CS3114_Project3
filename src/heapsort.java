@@ -1,4 +1,5 @@
 
+import java.io.RandomAccessFile;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -39,14 +40,15 @@ public class heapsort
 	private static int buffers;
 	private static HeapSorter sorter;
 	private static BufferPool pool;
-	private static PrintWriter output;
+	public  static PrintWriter output;
 
 	/**
 	 * @param args the command line arguments
 	 */
 	public static void main(String[] args) throws IOException
 	{
-		output = new PrintWriter(System.out);
+		output = new PrintWriter(System.out, true);
+		output.println("Start Program");
 		if (!parseArgs(args))
 		{
 			output.println("Program initialization failed.");
@@ -58,19 +60,20 @@ public class heapsort
 			sorter.sort();
 			writeStats();
 		}
+		output.println("End Program");
 	}
-	
+
 	private static void writeStats() throws IOException
 	{
 		long time = sorter.getSortTime();
 		long numBlocks = dataFile.length() / BufferPool.BLOCK_SIZE;
 		FileWriter writer = new FileWriter(statsFile);
-		
+
 		try (BufferedWriter bWriter = new BufferedWriter(writer))
 		{
-			bWriter.write(dataFile.getName() + ", with " + numBlocks 
+			bWriter.write(dataFile.getName() + ", with " + numBlocks
 					+ " blocks and " + buffers + " buffers\n");
-			bWriter.write("Cahce hits: " + pool.getCacheHits() 
+			bWriter.write("Cahce hits: " + pool.getCacheHits()
 					+ "  Cache misses: " + pool.getCacheMisses()
 					+ "");
 		}

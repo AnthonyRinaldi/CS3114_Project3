@@ -28,6 +28,7 @@ public class MaxHeap<E extends Comparable<? super E>>
 	 * the memory storage of the records.
 	 */
 	private RecordCollection<E> heap;
+	//private BufferPool pool;
 
 	/**
 	 * Creates a new {@code MaxHeap} with a specified storage manager
@@ -52,11 +53,17 @@ public class MaxHeap<E extends Comparable<? super E>>
 		this.size = max;
 		buildHeap();
 	}
+	/*
+	public MaxHeap(BufferPool p, int num, int max) throws HeapException
+    {
+        this.pool = p;
+        this.length = num;
+        this.size = max;
+        buildHeap();
+    }*/
 
 	/**
 	 * Attempts to build the heap according to max-heap standards.
-	 * <p/>
-	 * @throws HeapException
 	 */
 	private void buildHeap() throws HeapException
 	{
@@ -68,9 +75,7 @@ public class MaxHeap<E extends Comparable<? super E>>
 
 	/**
 	 * Determines if a given position is a leaf.
-	 * <p/>
 	 * @param pos the position to analyze
-	 * <p/>
 	 * @return {@code true} if the position is a leaf (it has no children),
 	 *            {@code false} otherwise
 	 */
@@ -164,8 +169,10 @@ public class MaxHeap<E extends Comparable<? super E>>
 	 * <p/>
 	 * @throws IllegalHeapPositionException
 	 */
-	private void siftDown(int pos) throws IllegalHeapPositionException
+	private void siftDown(int posn) throws IllegalHeapPositionException
 	{
+	    heapsort.output.println("siftDown");
+	    int pos = posn; // You should not be touching the value of input values.
 		if ((pos > length) || (pos < 0))
 		{
 			throw new IllegalHeapPositionException("Illegal Heap position: " + pos);

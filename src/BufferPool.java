@@ -77,6 +77,7 @@ public class BufferPool
 	 */
 	public BufferPool(int numBuffers, File file) throws FileNotFoundException
 	{
+	    heapsort.output.println("new BufferPool");
 		pool = new LinkedList<>();
 		POOL_COUNT = numBuffers;
 		this.file = new RandomAccessFile(file, "rw");
@@ -102,6 +103,7 @@ public class BufferPool
 	 */
 	public byte[] get(int start, int end) throws IOException
 	{
+	    heapsort.output.println("get from BufferPool");
 		byte[] ret = new byte[end - start];
 		int retIndex = 0;
 		for (int i = start; i < end; i++)
@@ -134,6 +136,7 @@ public class BufferPool
 	 */
 	public void set(byte[] bytes, int start, int end) throws IOException
 	{
+	    heapsort.output.println("set to BufferPool");
 		for (int i = start; i < end; i++)
 		{
 			int blockNum = i / BLOCK_SIZE;

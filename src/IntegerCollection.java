@@ -52,7 +52,7 @@ public class IntegerCollection
 		//calculate the starting and ending access indeces
 		int start = recordNum * RECORD_SIZE;
 		int end = start + RECORD_SIZE;
-		//if an error occurs whil trying to read bytes, this method will return 
+		//if an error occurs whil trying to read bytes, this method will return
 		//a zero-sized array; otherwise it will return the desired bytes
 		byte[] got = new byte[0];
 		try
@@ -94,7 +94,7 @@ public class IntegerCollection
 	 */
 	private HeapRecord decode(byte[] bytes)
 	{
-		//if there was an error retrieving bytes, then the byte array will be 
+		//if there was an error retrieving bytes, then the byte array will be
 		//zero-sized and thus does not contain a valid HeapRecord
 		if (bytes.length < 1)
 		{
@@ -140,6 +140,13 @@ public class IntegerCollection
 		set(f, second);
 		//put second record in first position
 		set(s, first);
-		
+
 	}
+
+    @Override
+    public int getLength()
+    {
+        // TODO Auto-generated method stub
+        return 0;
+    }
 }

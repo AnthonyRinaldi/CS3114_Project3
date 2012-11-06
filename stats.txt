@@ -1,0 +1,2 @@
+rw, with 0 blocks and 4 buffers
+Cahce hits: 0  Cache misses: 0

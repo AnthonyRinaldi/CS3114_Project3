@@ -23,12 +23,13 @@ public class HeapSorter
 
 	// ----------------------------------------------------------
 	/**
-	 * Place a description of your method here.
+	 * Constructor for the HeapSorter
 	 * <p/>
-	 * @param input
+	 * @param collection
 	 */
 	public HeapSorter(RecordCollection<HeapRecord> collection)
 	{
+	    heapsort.output.println("New HeapSorter");
 		this.collection = collection;
 		/*
 		 MaxHeap H = new MaxHeap(input, input.length(), input.length());
@@ -50,18 +51,26 @@ public class HeapSorter
 	}
 
 
+    // ----------------------------------------------------------
+    /**
+     * Sorts the heap.
+     */
     public void sort()
     {
         // TODO Auto-generated method stub
-		
+
+
 		// Get the initial time
 		long startTime = System.currentTimeMillis();
-		
+		heapsort.output.println("Start Sort: " + startTime);
+
+		//heapsort.output.println("Now, sort the data...");
 		//sorting stuff here
-		
+		collection.
 		// Get the end time
 		long endTime = System.currentTimeMillis();
 		// Calculate the total time
 		time = endTime - startTime;
+		heapsort.output.println("Final time in milliseconds: " + time);
     }
 }

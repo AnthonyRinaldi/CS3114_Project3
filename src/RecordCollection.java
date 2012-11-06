@@ -28,12 +28,14 @@ public interface RecordCollection<E>
 	 * @param recordNum the index at which to replace
 	 */
 	public void set(E element, int recordNum);
-	
+
 	/**
 	 * Swaps the element at {@code first} with the element at {@code second}.
-	 * 
+	 *
 	 * @param first the index of the element to swap
 	 * @param second the index of the element to swap {@code first} with
 	 */
 	public void swap(int first, int second);
+
+    public int getLength();
 }
