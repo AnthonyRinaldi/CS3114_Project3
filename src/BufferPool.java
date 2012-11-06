@@ -308,6 +308,7 @@ public class BufferPool
 		//allocate byte array
 		byte[] ret = new byte[end - start];
 		int retIndex = 0;
+		heapsort.output.println("BufferPool: end - start = " + (end - start));
 		for (int i = start; i < end; i++)
 		{
 			ret[retIndex] = file.readByte();
