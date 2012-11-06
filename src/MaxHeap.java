@@ -1,5 +1,20 @@
 
+<<<<<<< HEAD
 public class MaxHeap
+=======
+// -------------------------------------------------------------------------
+/**
+ *  This is a MaxHeap; a heap with the largest value at the top.
+ *
+ *  NOTE: All needed is a method to heapify an array. Simple!
+ *
+ *  @author Anthony Rinaldi
+ *  @author Ryan Merkel
+ *  @version November 5, 2012
+ * @param <E> Generic
+ */
+public class MaxHeap<E extends Comparable<? super E>>
+>>>>>>> Added sort method
 {
     int len;
 

@@ -7,7 +7,7 @@
  * @author Ryan Merkel
  * @version November 5, 2012
  */
-public class Heapsorter
+public class HeapSorter
 {
 
 	/**
@@ -21,7 +21,7 @@ public class Heapsorter
 	 * <p/>
 	 * @param input
 	 */
-	public Heapsorter(RecordCollection<HeapRecord> collection)
+	public HeapSorter(RecordCollection<HeapRecord> collection)
 	{
 		// Get the initial time
 		long startTime = System.currentTimeMillis();
@@ -48,9 +48,11 @@ public class Heapsorter
 	{
 		return time;
 	}
-	
-	public void sort()
-	{
-		
-	}
+
+
+    public void sort()
+    {
+        // TODO Auto-generated method stub
+
+    }
 }
