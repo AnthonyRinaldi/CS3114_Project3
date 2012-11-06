@@ -10,7 +10,6 @@
  * @param <E> Generic
  */
 public class MaxHeap<E extends Comparable<? super E>>
-
 {
     int len;
 
