@@ -35,7 +35,12 @@ public interface RecordCollection<E>
 	 * @param first the index of the element to swap
 	 * @param second the index of the element to swap {@code first} with
 	 */
-	public void swap(int first, int second);
+	//public void swap(int first, int second);
 
-    public int getLength();
+    // ----------------------------------------------------------
+    /**
+     * Get the number of records in the collection
+     * @return
+     */
+    public long getLength();
 }

@@ -29,6 +29,7 @@ public class IntegerCollection
 	 * The {@link BufferPool} utilized by this {@code IntegerCollection}.
 	 */
 	private BufferPool pool;
+    private long length;
 	/**
 	 * The static size of managed records, in bytes. For Project 3, this is 4.
 	 */
@@ -38,12 +39,13 @@ public class IntegerCollection
 	 * Constructs a new {@code IntegerCollection} given a
 	 * {@link BufferPool} {@code p}. The size of the pool is not determined
 	 * here; it is determined higher up the hierarchy.
-	 * <p/>
 	 * @param p the {@link BufferPool} to use
+	 * @param length
 	 */
-	public IntegerCollection(BufferPool p)
+	public IntegerCollection(BufferPool p, long length)
 	{
 		this.pool = p;
+		this.length = length/RECORD_SIZE;
 	}
 
 	@Override
@@ -52,7 +54,7 @@ public class IntegerCollection
 		//calculate the starting and ending access indeces
 		int start = recordNum * RECORD_SIZE;
 		int end = start + RECORD_SIZE;
-		//if an error occurs whil trying to read bytes, this method will return
+		//if an error occurs while trying to read bytes, this method will return
 		//a zero-sized array; otherwise it will return the desired bytes
 		byte[] got = new byte[0];
 		try
@@ -129,7 +131,7 @@ public class IntegerCollection
 		}
 		return ret;
 	}
-
+/*
 	@Override
 	public void swap(int first, int second)
 	{
@@ -141,12 +143,12 @@ public class IntegerCollection
 		//put second record in first position
 		set(s, first);
 
-	}
+	}*/
 
-    @Override
-    public int getLength()
+
+    public long getLength()
     {
-        // TODO Auto-generated method stub
-        return 0;
+        return length;
     }
+
 }

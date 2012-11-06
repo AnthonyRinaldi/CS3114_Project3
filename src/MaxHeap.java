@@ -21,8 +21,9 @@ public class MaxHeap<E extends Comparable<? super E>>
 	private int length;
 	/**
 	 * Maximum allowable size of the heap, in terms of number of records.
+	 * THIS IS ALSO THE NUMBER OF ENTRIES IN THE ARRAY!!!
 	 */
-	private int size;
+	private long size;
 	/**
 	 * Serves as the interface between this class and whatever class is managing
 	 * the memory storage of the records.
@@ -46,10 +47,10 @@ public class MaxHeap<E extends Comparable<? super E>>
 	 * <p/>
 	 * @throws HeapException
 	 */
-	public MaxHeap(RecordCollection<E> c, int num, int max) throws HeapException
+	public MaxHeap(RecordCollection<E> c, long num, long max) throws HeapException
 	{
 		this.heap = c;
-		this.length = num;
+		this.length = (int) num;
 		this.size = max;
 		buildHeap();
 	}
@@ -140,7 +141,7 @@ public class MaxHeap<E extends Comparable<? super E>>
 			throw new IllegalHeapStateException("Attempting to operate on an empty heap");
 		}
 		//swaps the largest value (always at the root) with the last value
-		heap.swap(0, --length);
+		swap(heap, 0, --length);
 		if (length != 0)
 		{
 			siftDown(0);
@@ -148,6 +149,17 @@ public class MaxHeap<E extends Comparable<? super E>>
 		return heap.get(length);
 
 	}
+
+	/**
+     * Swaps the posn1, posn2value in the array hp
+     */
+    private void swap(RecordCollection<E> hp, int posn1, int length2)
+    {
+        E record1 = hp.get(posn1);
+        E record2 = hp.get(length2);
+        hp.set(record1, length2);
+        hp.set(record2, posn1);
+    }
 
 	/**
 	 * Return the length, or current number of stored records, of the heap.
@@ -169,10 +181,10 @@ public class MaxHeap<E extends Comparable<? super E>>
 	 * <p/>
 	 * @throws IllegalHeapPositionException
 	 */
-	private void siftDown(int posn) throws IllegalHeapPositionException
+	private void siftDown(int i) throws IllegalHeapPositionException
 	{
 	    heapsort.output.println("siftDown");
-	    int pos = posn; // You should not be touching the value of input values.
+	    int pos = i; // You should not be touching the value of input values.
 		if ((pos > length) || (pos < 0))
 		{
 			throw new IllegalHeapPositionException("Illegal Heap position: " + pos);
@@ -188,7 +200,7 @@ public class MaxHeap<E extends Comparable<? super E>>
 			{
 				return;
 			}
-			heap.swap(pos, j);
+			swap(heap, pos, j);
 			pos = j;  // Move down
 
 		}
@@ -216,7 +228,7 @@ public class MaxHeap<E extends Comparable<? super E>>
 		// Siftup until curr parent's key > curr key
 		while ((curr != 0) && (heap.get(curr).compareTo(heap.get(parent(curr))) > 0))
 		{
-			heap.swap(curr, parent(curr));
+			swap(heap, curr, parent(curr));
 			curr = parent(curr);
 		}
 	}

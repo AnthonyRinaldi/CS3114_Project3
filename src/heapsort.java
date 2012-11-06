@@ -44,8 +44,9 @@ public class heapsort
 
 	/**
 	 * @param args the command line arguments
+	 * @throws HeapException
 	 */
-	public static void main(String[] args) throws IOException
+	public static void main(String[] args) throws IOException, HeapException
 	{
 		output = new PrintWriter(System.out, true);
 		output.println("Start Program");
@@ -56,7 +57,8 @@ public class heapsort
 		else
 		{
 			pool = new BufferPool(buffers, dataFile);
-			sorter = new HeapSorter(new IntegerCollection(pool));
+			output.println("Input File Size: " + dataFile.length());
+			sorter = new HeapSorter(new IntegerCollection(pool, dataFile.length()));
 			sorter.sort();
 			writeStats();
 		}

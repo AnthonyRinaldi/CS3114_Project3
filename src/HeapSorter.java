@@ -31,11 +31,6 @@ public class HeapSorter
 	{
 	    heapsort.output.println("New HeapSorter");
 		this.collection = collection;
-		/*
-		 MaxHeap H = new MaxHeap(input, input.length(), input.length());
-		 for (int i=0; i < input.length(); i++)  // Sort
-		 H.removemax(); // Removemax places max at end of heap
-		 */
 	}
 
 	// ----------------------------------------------------------
@@ -54,19 +49,26 @@ public class HeapSorter
     // ----------------------------------------------------------
     /**
      * Sorts the heap.
+     * @throws HeapException
      */
-    public void sort()
+    public void sort() throws HeapException
     {
-        // TODO Auto-generated method stub
-
-
 		// Get the initial time
 		long startTime = System.currentTimeMillis();
 		heapsort.output.println("Start Sort: " + startTime);
-
+		heapsort.output.println("File Length: " + collection.getLength());
 		//heapsort.output.println("Now, sort the data...");
 		//sorting stuff here
-		collection.
+		/*long count;
+		for (count = 0; count < collection.getLength(); count++);
+		{
+		    heapsort.output.println(count);
+		}*/
+
+		MaxHeap<HeapRecord> H = new MaxHeap<HeapRecord>(collection, collection.getLength(), collection.getLength());
+        for (int i=0; i < collection.getLength(); i++)  // Sort
+        H.removeMax(); // Removemax places max at end of heap
+
 		// Get the end time
 		long endTime = System.currentTimeMillis();
 		// Calculate the total time
