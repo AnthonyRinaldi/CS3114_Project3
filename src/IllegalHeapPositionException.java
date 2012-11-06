@@ -7,7 +7,7 @@
  * @author rinaldi1
  */
 public class IllegalHeapPositionException
-	extends Exception
+	extends HeapException
 {
 	/**
 	 * Default to super constructor, no custom error message.

@@ -15,11 +15,11 @@ public interface RecordCollection<E>
 	/**
 	 * Gets a record stored in position {@code index}.
 	 * <p/>
-	 * @param index the index at which to retrieve a record
+	 * @param recordNum the index at which to retrieve a record
 	 * <p/>
 	 * @return the record stored at {@code index}
 	 */
-	public E get(int index);
+	public E get(int recordNum);
 
 	/**
 	 * Sets the record at position {@code recordNum} to {@code element}.
@@ -28,4 +28,12 @@ public interface RecordCollection<E>
 	 * @param recordNum the index at which to replace
 	 */
 	public void set(E element, int recordNum);
+	
+	/**
+	 * Swaps the element at {@code first} with the element at {@code second}.
+	 * 
+	 * @param first the index of the element to swap
+	 * @param second the index of the element to swap {@code first} with
+	 */
+	public void swap(int first, int second);
 }

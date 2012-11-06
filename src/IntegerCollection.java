@@ -47,10 +47,10 @@ public class IntegerCollection
 	}
 
 	@Override
-	public HeapRecord get(int index)
+	public HeapRecord get(int recordNum)
 	{
 		//calculate the starting and ending access indeces
-		int start = index * RECORD_SIZE;
+		int start = recordNum * RECORD_SIZE;
 		int end = start + RECORD_SIZE;
 		//if an error occurs whil trying to read bytes, this method will return 
 		//a zero-sized array; otherwise it will return the desired bytes
@@ -128,5 +128,18 @@ public class IntegerCollection
 			ret[3] = (byte) (val & 0xff);
 		}
 		return ret;
+	}
+
+	@Override
+	public void swap(int first, int second)
+	{
+		//hold the two records
+		HeapRecord f = get(first);
+		HeapRecord s = get(second);
+		//put first record in second position
+		set(f, second);
+		//put second record in first position
+		set(s, first);
+		
 	}
 }

@@ -3,7 +3,7 @@
  * @author orionf22
  */
 public class IllegalHeapStateException
-	extends Exception
+	extends HeapException
 {
 	public IllegalHeapStateException()
 	{
