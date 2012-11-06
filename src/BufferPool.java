@@ -43,6 +43,22 @@ public class BufferPool
 	 */
 	private int POOL_COUNT;
 	/**
+	 * A running count of the number of cache hits.
+	 */
+	private int CACHE_HITS;
+	/**
+	 * A running count of the number of cache misses.
+	 */
+	private int CACHE_MISSES;
+	/**
+	 * A running count of the number of disk reads.
+	 */
+	private int DISK_READS;
+	/**
+	 * A running count of the number of disk writes.
+	 */
+	private int DISK_WRITES;
+	/**
 	 * The static size of blocks within the source, in bytes. For Project 3,
 	 * this is 4096.
 	 */
@@ -64,7 +80,10 @@ public class BufferPool
 		pool = new LinkedList<>();
 		POOL_COUNT = numBuffers;
 		this.file = new RandomAccessFile(file, "rw");
-
+		CACHE_HITS = 0;
+		CACHE_MISSES = 0;
+		DISK_READS = 0;
+		DISK_WRITES = 0;
 	}
 
 	/**
@@ -125,19 +144,63 @@ public class BufferPool
 	}
 
 	/**
+	 * Retrieves the number of cache hits this {@code BufferPool} generated.
+	 * <p/>
+	 * @return the cache hit count
+	 */
+	public int getCacheHits()
+	{
+		return this.CACHE_HITS;
+	}
+
+	/**
+	 * Retrieves the number of cache misses this {@code BufferPool} generated.
+	 * <p/>
+	 * @return the cache miss count
+	 */
+	public int getCacheMisses()
+	{
+		return this.CACHE_MISSES;
+	}
+
+	/**
+	 * Retrieves the number of disk reads this {@code BufferPool} made.
+	 * <p/>
+	 * @return the disk read count
+	 */
+	public int getDiskReads()
+	{
+		return this.DISK_READS;
+	}
+
+	/**
+	 * Retrieves the number of disk writes this {@code BufferPool} made.
+	 * <p/>
+	 * @return the disk write count
+	 */
+	public int getDiskWrites()
+	{
+		return this.DISK_WRITES;
+	}
+
+	/**
 	 * Get the right {@link Buffer} from the pool given {@code blockNum}. If the
 	 * desired {@link Buffer} is not already in the pool, it must be fetched. If
 	 * the pool is already holding the maximum number of {@link Buffer Buffers},
-	 * as defined by {@link BufferPool#POOL_COUNT}, then the {@link Buffer} at
-	 * the end of the list is removed and the new {@link Buffer} added to the
-	 * front. If the removed {@link Buffer} is marked as {@code dirty}, bytes in
-	 * the source are modified.
+	 * as defined by {@link BufferPool#POOL_COUNT POOL_COUNT}, then the
+	 * {@link Buffer} at the end of the list is removed and the new
+	 * {@link Buffer} added to the front. If the removed {@link Buffer} is
+	 * marked as {@code dirty}, bytes in the source are modified.
 	 * <p/>
-	 * @param blockNum
-	 * @param start
-	 * @param end      < p/>
+	 * If the desired {@link Buffer} is already in the pool, a {@code cache hit}
+	 * occurs. {@link BufferPool#CACHE_HITS CACHE_HITS} is incremented.
 	 * <p/>
-	 * @return < p/>
+	 * @param blockNum if the desired {@link Buffer} is already in the pool, the
+	 *                    {@link Buffer} with this number will be returned
+	 * @param start    the starting index in the source at which to read data
+	 * @param end      the ending index in the source at which to read data
+	 * <p/>
+	 * @return the desired {@link Buffer}
 	 * <p/>
 	 * @throws IOException
 	 * @see BufferPool#setBytesInFile(byte[], int)
@@ -150,6 +213,7 @@ public class BufferPool
 			if (buff.getNumber() == blockNum)
 			{
 				LRU(buff);
+				CACHE_HITS++;
 				return buff;
 			}
 		}
@@ -165,6 +229,10 @@ public class BufferPool
 	 * last {@link Buffer} is removed from the list and the new one added to the
 	 * front. If the removed {@link Buffer} is marked as {@code dirty}, then
 	 * bytes in the source are modified.
+	 * <p/>
+	 * As this method is only invoked when a desired {@link Buffer} is not in
+	 * the pool, a {@code cache miss} occurs.
+	 * {@link BufferPool#CACHE_MISSES CACHE_MISSES} is incremented.
 	 * <p/>
 	 * @param blockNum the number of the desired {@link Buffer}
 	 * @param start    the starting index (within the source) of the new
@@ -199,6 +267,7 @@ public class BufferPool
 		}
 		size++;
 		pool.add(buff);
+		CACHE_MISSES++;
 		return buff;
 	}
 
@@ -218,7 +287,9 @@ public class BufferPool
 
 	/**
 	 * Retrieves a byte array from the source starting at {@code start} and
-	 * ending at {@code end}.
+	 * ending at {@code end}. Data is read from disk in this method as bytes are
+	 * accessed directly from the source file (stored on disk).
+	 * {@link BufferPool#DISK_READS DISK_READS} is incremented.
 	 * <p/>
 	 * @param start the starting index at which to acquire bytes from the source
 	 * @param end   the ending index at which to acquire bytes from the source
@@ -239,12 +310,15 @@ public class BufferPool
 			ret[retIndex] = file.readByte();
 			retIndex++;
 		}
+		DISK_READS++;
 		return ret;
 	}
 
 	/**
-	 * Modifies the contents of the source starting at {@code start}. THe
+	 * Modifies the contents of the source starting at {@code start}. The
 	 * contents of {@code bytes} are used to overwrite existing information.
+	 * Data is written to the source file (stored on disk).
+	 * {@link BufferPool#DISK_WRITES} is incremented.
 	 * <p/>
 	 * @param bytes the bytes to write
 	 * @param start the starting index at which to write < p/>
@@ -256,5 +330,6 @@ public class BufferPool
 		//navigate to proper position
 		file.seek(start);
 		file.write(bytes);
+		DISK_WRITES++;
 	}
 }
