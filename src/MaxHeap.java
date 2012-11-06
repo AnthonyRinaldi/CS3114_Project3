@@ -1,7 +1,3 @@
-
-<<<<<<< HEAD
-public class MaxHeap
-=======
 // -------------------------------------------------------------------------
 /**
  *  This is a MaxHeap; a heap with the largest value at the top.
@@ -14,7 +10,7 @@ public class MaxHeap
  * @param <E> Generic
  */
 public class MaxHeap<E extends Comparable<? super E>>
->>>>>>> Added sort method
+
 {
     int len;
 
