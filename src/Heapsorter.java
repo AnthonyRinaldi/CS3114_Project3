@@ -7,7 +7,7 @@
  *  @author Ryan Merkel
  *  @version November 5, 2012
  */
-public class Heapsorter
+public class HeapSorter
 {
 
     /**
