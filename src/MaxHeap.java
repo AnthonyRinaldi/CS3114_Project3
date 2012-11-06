@@ -51,17 +51,19 @@ public class MaxHeap<E extends Comparable<? super E>>
 
 
     /** Put element in its correct place */
-    private void siftdown(int pos)
+    private void siftdown(int posin)
     {
+        int pos = posin;
         assert (pos >= 0) && (pos < len) : "Illegal heap position";
         while (!isLeaf(pos))
         {
             int j = leftchild(pos);
             if ((j<(len - 1)) && (array[j].compareTo(array[j+1]) < 0))
                 j++; // j is now index of child with greater value
-            if (array[pos].compareTo(array[j]) >= 0) return;
-                swap(array, pos, j);
-        pos = j; // Move down
+            if (array[pos].compareTo(array[j]) >= 0)
+                return;
+            swap(array, pos, j);
+            pos = j; // Move down
         }
     }
 
@@ -72,19 +74,22 @@ public class MaxHeap<E extends Comparable<? super E>>
         array2[j] = temp;
     }
 
-    /** @return Position for left child of pos */
+    /** @param pos
+     * @return Position for left child of pos */
     public int leftchild(int pos)
     {
         assert pos < len/2 : "Position has no left child";
         return 2*pos + 1;
     }
-    /** @return Position for right child of pos */
+    /** @param pos
+     * @return Position for right child of pos */
     public int rightchild(int pos)
     {
         assert pos < (len-1)/2 : "Position has no right child";
         return 2*pos + 2;
     }
-    /** @return Position for parent */
+    /** @param pos
+     * @return Position for parent */
     public int parent(int pos)
     {
         assert pos > 0 : "Position has no parent";
