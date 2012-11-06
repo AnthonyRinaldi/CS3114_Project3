@@ -50,7 +50,7 @@ public class heapsort
 		else
 		{
 			BufferPool pool = new BufferPool(buffers, dataFile);
-			HeapSorter sorter = new HeapSorter(new IntegerCollection(pool));
+			Heapsorter sorter = new Heapsorter(new IntegerCollection(pool));
 			sorter.sort();
 		}
 	}
