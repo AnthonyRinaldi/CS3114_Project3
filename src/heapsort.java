@@ -1,6 +1,9 @@
 
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.io.PrintWriter;
 
 // On my honor:
@@ -34,13 +37,14 @@ public class heapsort
 	private static File dataFile;
 	private static File statsFile;
 	private static int buffers;
-
+	private static HeapSorter sorter;
+	private static BufferPool pool;
 	private static PrintWriter output;
 
 	/**
 	 * @param args the command line arguments
 	 */
-	public static void main(String[] args) throws FileNotFoundException
+	public static void main(String[] args) throws IOException
 	{
 		output = new PrintWriter(System.out);
 		if (!parseArgs(args))
@@ -49,9 +53,26 @@ public class heapsort
 		}
 		else
 		{
-			BufferPool pool = new BufferPool(buffers, dataFile);
-			HeapSorter sorter = new HeapSorter(new IntegerCollection(pool));
+			pool = new BufferPool(buffers, dataFile);
+			sorter = new HeapSorter(new IntegerCollection(pool));
 			sorter.sort();
+			writeStats();
+		}
+	}
+	
+	private static void writeStats() throws IOException
+	{
+		long time = sorter.getSortTime();
+		long numBlocks = dataFile.length() / BufferPool.BLOCK_SIZE;
+		FileWriter writer = new FileWriter(statsFile);
+		
+		try (BufferedWriter bWriter = new BufferedWriter(writer))
+		{
+			bWriter.write(dataFile.getName() + ", with " + numBlocks 
+					+ " blocks and " + buffers + " buffers\n");
+			bWriter.write("Cahce hits: " + pool.getCacheHits() 
+					+ "  Cache misses: " + pool.getCacheMisses()
+					+ "");
 		}
 	}
 
