@@ -24,7 +24,7 @@ import java.io.PrintWriter;
 // letter of this restriction.
 
 /**
- * 
+ *
  * @author orionf22
  * @author rinaldi1
  */
@@ -34,9 +34,9 @@ public class heapsort
 	private static File dataFile;
 	private static File statsFile;
 	private static int buffers;
-	
+
 	private static PrintWriter output;
-	
+
 	/**
 	 * @param args the command line arguments
 	 */
@@ -50,11 +50,11 @@ public class heapsort
 		else
 		{
 			BufferPool pool = new BufferPool(buffers, dataFile);
-			Heapsorter sorter = new Heapsorter(new IntegerCollection(pool));
+			HeapSorter sorter = new HeapSorter(new IntegerCollection(pool));
 			sorter.sort();
 		}
 	}
-	
+
 	private static boolean parseArgs(String[] args)
 	{
 		if (args == null || args.length < 1)
