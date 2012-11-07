@@ -11,14 +11,14 @@ import java.util.LinkedList;
  * from and to a given source file without having to make disk accesses. The
  * {@code BufferPool} allows portions of a source file to be kept in main memory
  * for faster I/O operations.
- * <p/>
+ *
  * A standard {@link LinkedList} is used to manage in-memory {@link Buffer}
  * objects. The <b>Least Recently Used</b> scheme is used to manage the pool
  * list. Source file I/O requests go through the {@code BufferPool}, which
  * supports direct reading and writing of the source using a
  * {@link RandomAccessFile} through the implementation of {@link Buffer}
  * objects.
- * <p/>
+ *
  * @author orionf22
  * @author rinaldi1
  */
@@ -93,24 +93,22 @@ public class BufferPool
 	 * <p/>
 	 * @param start the location within the source from which to start reading
 	 *                 bytes
-	 * @param end   the location within the source from which to stop reading
-	 *                 bytes
-	 * <p/>
 	 * @return a byte array containing the bytes from the source from
 	 *            {@code start} to {@code end}
 	 * <p/>
 	 * @throws IOException
 	 */
-	public byte[] get(int start, int end) throws IOException
+	public byte[] get(int start) throws IOException
 	{
 	    heapsort.output.println("get from BufferPool");
-		byte[] ret = new byte[end - start];
+		byte[] ret = new byte[IntegerCollection.RECORD_SIZE];
 		int retIndex = 0;
-		for (int i = start; i < end; i++)
+		for (int i = start; i < start + IntegerCollection.RECORD_SIZE; i++)
 		{
 			//determine which Buffer to look at
 			int blockNum = i / BLOCK_SIZE;
-			Buffer buff = retrieve(blockNum, start, end);
+			Buffer buff = retrieve(blockNum, start);
+			//heapsort.output.println("buff.get(" + (i - (blockNum * BLOCK_SIZE)) + ")" );
 			ret[retIndex] = buff.get(i - (blockNum * BLOCK_SIZE));
 			retIndex++;
 		}
@@ -140,7 +138,7 @@ public class BufferPool
 		for (int i = start; i < end; i++)
 		{
 			int blockNum = i / BLOCK_SIZE;
-			Buffer buff = retrieve(blockNum, start, end);
+			Buffer buff = retrieve(blockNum, start);
 			buff.setBytes(bytes);
 			buff.makeDirty();
 		}
@@ -208,7 +206,7 @@ public class BufferPool
 	 * @throws IOException
 	 * @see BufferPool#setBytesInFile(byte[], int)
 	 */
-	private Buffer retrieve(int blockNum, int start, int end) throws IOException
+	private Buffer retrieve(int blockNum, int start) throws IOException
 	{
 		//first search the pool for the right Buffer
 		for (Buffer buff : pool)
@@ -221,7 +219,7 @@ public class BufferPool
 			}
 		}
 		//not in the pool, so add it
-		Buffer buff = addBuffer(blockNum, start, end);
+		Buffer buff = addBuffer(blockNum, start);
 		return buff;
 	}
 
@@ -248,10 +246,10 @@ public class BufferPool
 	 * @throws IOException
 	 * @see BufferPool#setBytesInFile(byte[], int)
 	 */
-	private Buffer addBuffer(int blockNum, int start, int end) throws IOException
+	private Buffer addBuffer(int blockNum, int start) throws IOException
 	{
 		//create the new Buffer
-		Buffer buff = new Buffer(blockNum, getBytesFromFile(start, end));
+		Buffer buff = new Buffer(blockNum, getBytesFromFile(start));
 		//if the pool is full, remove the last Buffer, setting bytes if the
 		//Buffer is dirty
 		if (size == POOL_COUNT)
@@ -293,23 +291,20 @@ public class BufferPool
 	 * ending at {@code end}. Data is read from disk in this method as bytes are
 	 * accessed directly from the source file (stored on disk).
 	 * {@link BufferPool#DISK_READS DISK_READS} is incremented.
-	 * <p/>
 	 * @param start the starting index at which to acquire bytes from the source
 	 * @param end   the ending index at which to acquire bytes from the source
-	 * <p/>
 	 * @return the acquired bytes from the source
-	 * <p/>
 	 * @throws IOException
 	 */
-	private byte[] getBytesFromFile(int start, int end) throws IOException
+	private byte[] getBytesFromFile(int start) throws IOException
 	{
 		//navigate to the right position in the source
 		file.seek(start);
 		//allocate byte array
-		byte[] ret = new byte[end - start];
+		byte[] ret = new byte[BLOCK_SIZE];
 		int retIndex = 0;
-		heapsort.output.println("BufferPool: end - start = " + (end - start));
-		for (int i = start; i < end; i++)
+		//heapsort.output.println("BufferPool: end = " + end + "\n" +  "start = " + start);
+		for (int i = start; i < start + BLOCK_SIZE; i++)
 		{
 			ret[retIndex] = file.readByte();
 			retIndex++;
@@ -323,10 +318,8 @@ public class BufferPool
 	 * contents of {@code bytes} are used to overwrite existing information.
 	 * Data is written to the source file (stored on disk).
 	 * {@link BufferPool#DISK_WRITES} is incremented.
-	 * <p/>
 	 * @param bytes the bytes to write
-	 * @param start the starting index at which to write < p/>
-	 * <p/>
+	 * @param start the starting index at which to write
 	 * @throws IOException
 	 */
 	private void setBytesInFile(byte[] bytes, int start) throws IOException

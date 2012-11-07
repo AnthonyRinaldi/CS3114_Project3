@@ -33,7 +33,7 @@ public class IntegerCollection
 	/**
 	 * The static size of managed records, in bytes. For Project 3, this is 4.
 	 */
-	private static final int RECORD_SIZE = 4;
+	public static final int RECORD_SIZE = 4;
 
 	/**
 	 * Constructs a new {@code IntegerCollection} given a
@@ -53,13 +53,13 @@ public class IntegerCollection
 	{
 		//calculate the starting and ending access indeces
 		int start = recordNum * RECORD_SIZE;
-		int end = start + RECORD_SIZE;
+		//int end = start + RECORD_SIZE;
 		//if an error occurs while trying to read bytes, this method will return
 		//a zero-sized array; otherwise it will return the desired bytes
 		byte[] got = new byte[0];
 		try
 		{
-			got = pool.get(start, end);
+			got = pool.get(start);
 		}
 		catch (IOException ex)
 		{
