@@ -317,7 +317,8 @@ public class BufferPool
 	 * Modifies the contents of the source starting at {@code start}. The
 	 * contents of {@code bytes} are used to overwrite existing information.
 	 * Data is written to the source file (stored on disk).
-	 * {@link BufferPool#DISK_WRITES} is incremented.
+	 * {@link BufferPool#DISK_WRITES DISK_WRITES} is incremented.
+	 * <p/>
 	 * @param bytes the bytes to write
 	 * @param start the starting index at which to write
 	 * @throws IOException
