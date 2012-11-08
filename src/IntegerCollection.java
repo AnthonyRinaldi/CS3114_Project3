@@ -45,7 +45,7 @@ public class IntegerCollection
 	public IntegerCollection(BufferPool p, long length)
 	{
 		this.pool = p;
-		this.length = length/RECORD_SIZE;
+		this.length = length / RECORD_SIZE;
 	}
 
 	@Override

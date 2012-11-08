@@ -1,11 +1,10 @@
 
-import java.io.RandomAccessFile;
 import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.text.DecimalFormat;
 
 // On my honor:
 //
@@ -76,34 +75,49 @@ public class heapsort
 		int diskReads = pool.getDiskReads();
 		int diskWrites = pool.getDiskWrites();
 		
+		//determine how many digits are in each stat
 		int cacheHitLength = String.valueOf(cacheHits).length();
 		int diskReadLength = String.valueOf(diskReads).length();
 		int cacheMissLength = String.valueOf(cacheMisses).length();
 		int diskWriteLength = String.valueOf(diskWrites).length();
 		
+		//String-ify stats
 		String cacheHitStats = "Cache hits: ";
 		String cacheMissStats = "Cache misses: ";
 		String diskReadStats = "Disk Reads: ";
 		String diskWriteStats = "Disk Writes: ";
 		
+		//these if statements check to see which stat has more digits
 		if (cacheHitLength > diskReadLength)
 		{
-			diskReadStats += " " + padInteger(diskReads, diskReadLength) + "  ";
+			diskReadStats += " " + padInteger(diskReads, cacheHitLength) + "  ";
 			cacheHitStats += " " + cacheHits + "  ";
+		}
+		else
+		{
+			diskReadStats += " " + diskReads + "  ";
+			cacheHitStats += " " + padInteger(cacheHits, diskReadLength) + "  ";
 		}
 		
 		if (cacheMissLength > diskWriteLength)
 		{
-			
+			cacheMissStats += " " + cacheMisses + "  \n";
+			diskWriteStats += " " + padInteger(diskWrites, cacheMissLength) 
+					+ "  \n";
+		}
+		else
+		{
+			cacheMissStats += " " + padInteger(cacheMisses, diskWriteLength) 
+					+ "  \n";
+			diskWriteStats += " " + diskWrites + "  \n";
 		}
 		
 		try (BufferedWriter bWriter = new BufferedWriter(writer))
 		{
 			bWriter.write(dataFile.getName() + ", with " + numBlocks
 					+ " blocks and " + buffers + " buffers\n");
-			bWriter.write("Cahce hits: " + pool.getCacheHits()
-					+ "  Cache misses: " + pool.getCacheMisses()
-					+ "");
+			bWriter.write(cacheHitStats + cacheMissStats + diskReadStats 
+					+ diskWriteStats + "Time: " + time + "\n");
 		}
 	}
 	
@@ -125,8 +139,9 @@ public class heapsort
 		{
 			ret += " ";
 		}
+		DecimalFormat formatter = new DecimalFormat("#,###");
 		//add val at the end
-		return ret += val;
+		return ret += formatter.format(val);
 	}
 
 	private static boolean parseArgs(String[] args)
