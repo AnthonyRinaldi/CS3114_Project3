@@ -55,11 +55,17 @@ public class Buffer
 	/**
 	 * Assigns {@code bytes} to this {@code Buffer}.
 	 * <p/>
-	 * @param bytes the new byte array to manage
+	 * @param b the new byte array to manage
 	 */
-	public void setBytes(byte[] bytes)
+	public void setBytes(byte[] b, int start)
 	{
-		this.bytes = bytes;
+		int bIndex = 0;
+		int size = b.length;
+		for (int i = start; i < start + size; i++)
+		{
+			bytes[i] = b[bIndex];
+			bIndex++;
+		}
 	}
 
 	/**

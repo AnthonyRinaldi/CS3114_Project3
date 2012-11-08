@@ -150,7 +150,7 @@ public class BufferPool
 		 */
 		int blockNum = start / BLOCK_SIZE;
 		Buffer buff = retrieve(blockNum, blockNum * BLOCK_SIZE);
-		buff.setBytes(bytes);
+		buff.setBytes(bytes, start);
 		buff.makeDirty();
 		//this.flush();
 	}
