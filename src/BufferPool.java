@@ -140,7 +140,7 @@ public class BufferPool
 		for (int i = start; i < end; i++)
 		{
 			int blockNum = i / BLOCK_SIZE;
-			Buffer buff = retrieve(blockNum, start);
+			Buffer buff = retrieve(blockNum, (start / BLOCK_SIZE) * BLOCK_SIZE);
 			buff.setBytes(bytes);
 			buff.makeDirty();
 		}
