@@ -62,7 +62,7 @@ public class BufferPool
 	 * The static size of blocks within the source, in bytes. For Project 3,
 	 * this is 4096.
 	 */
-	public static final int BLOCK_SIZE = 4096;
+	public static final int BLOCK_SIZE = 16;
 
 	/**
 	 * Constructs a new {@code BufferPool} with space for {@code numBuffers}
@@ -77,7 +77,7 @@ public class BufferPool
 	 */
 	public BufferPool(int numBuffers, File file) throws FileNotFoundException
 	{
-		heapsort.output.println("new BufferPool");
+		//heapsort.output.println("new BufferPool");
 		pool = new LinkedList<>();
 		POOL_COUNT = numBuffers;
 		this.file = new RandomAccessFile(file, "rw");
@@ -109,9 +109,10 @@ public class BufferPool
 			//determine which Buffer to look at
 			int blockNum = i / BLOCK_SIZE;
 			Buffer buff = retrieve(blockNum, blockNum * BLOCK_SIZE);
-			heapsort.output.println(blockNum);
+			//heapsort.output.println(blockNum);
 			//heapsort.output.println("buff.get(" + (i - (blockNum * BLOCK_SIZE)) + ")" );
 			//heapsort.output.println("ret[" + retIndex +"] = buff.get("+ (i - (blockNum * BLOCK_SIZE))+");");
+			heapsort.output.println("ret[" + retIndex +"] = buff.get(" + i + " - (" + blockNum + " * " + BLOCK_SIZE +"));");
 			ret[retIndex] = buff.get(i - (blockNum * BLOCK_SIZE));
 			retIndex++;
 		}
@@ -137,7 +138,7 @@ public class BufferPool
 	 */
 	public void set(byte[] bytes, int start, int end) throws IOException
 	{
-		heapsort.output.println("set to BufferPool");
+		//heapsort.output.println("set to BufferPool");
 		/*
 		 for (int i = start; i < end; i++)
 		 {
@@ -151,6 +152,7 @@ public class BufferPool
 		Buffer buff = retrieve(blockNum, blockNum * BLOCK_SIZE);
 		buff.setBytes(bytes);
 		buff.makeDirty();
+		//this.flush();
 	}
 
 	/**
@@ -296,7 +298,7 @@ public class BufferPool
 		byte[] ret = new byte[BLOCK_SIZE];
 		int retIndex = 0;
 		//heapsort.output.println("BufferPool: end = " + end + "\n" +  "start = " + start);
-		for (int i = start; i < start + BLOCK_SIZE && i < file.length(); i++)
+		for (int i = start; i < BLOCK_SIZE; i++)
 		{
 			ret[retIndex] = file.readByte();
 			retIndex++;

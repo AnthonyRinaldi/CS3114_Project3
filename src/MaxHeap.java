@@ -51,6 +51,7 @@ public class MaxHeap<E extends Comparable<? super E>>
 	{
 		this.heap = c;
 		this.length = (int) num;
+		heapsort.output.println("MaxHeap Collection Length: " + length);
 		this.size = max;
 		buildHeap();
 	}
@@ -133,6 +134,7 @@ public class MaxHeap<E extends Comparable<? super E>>
 	 * {@link HeapException} is thrown.
 	 * <p/>
 	 * @return the largest value in the heap
+	 * @throws HeapException
 	 */
 	public E removeMax() throws HeapException
 	{
@@ -181,18 +183,18 @@ public class MaxHeap<E extends Comparable<? super E>>
 	 * <p/>
 	 * @throws IllegalHeapPositionException
 	 */
-	private void siftDown(int i) throws IllegalHeapPositionException
+	private void siftDown(int pos) throws IllegalHeapPositionException
 	{
-	    heapsort.output.println("siftDown");
-	    int pos = i; // You should not be touching the value of input values.
-		if ((pos > length) || (pos < 0))
+	    //heapsort.output.println("siftDown");
+	    //int pos = i; // You should not be touching the value of input values.
+		if ((pos >= length) || (pos < 0))
 		{
 			throw new IllegalHeapPositionException("Illegal Heap position: " + pos);
 		}
 		while (!isLeaf(pos))
 		{
 			int j = leftChild(pos);
-			if ((j < (length - 1)) && (heap.get(j).compareTo(heap.get(j + 1)) < 0))
+			if ((j < (length - 1)) && (heap.get(j-1).compareTo(heap.get(j)) < 0))
 			{
 				j++; // index of child w/ greater value
 			}
@@ -202,7 +204,6 @@ public class MaxHeap<E extends Comparable<? super E>>
 			}
 			swap(heap, pos, j);
 			pos = j;  // Move down
-
 		}
 	}
 

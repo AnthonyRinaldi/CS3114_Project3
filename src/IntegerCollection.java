@@ -60,7 +60,7 @@ public class IntegerCollection
 		byte[] got = new byte[0];
 		try
 		{
-			heapsort.output.println("pool.get(" + start + ")");
+			//heapsort.output.println("pool.get(" + start + ")");
 			got = pool.get(start);
 		}
 		catch (IOException ex)
@@ -137,7 +137,7 @@ public class IntegerCollection
 	/**
 	 * Acquires the first record in each block of the file. A block's size is
 	 * dependent upon the value of {@link BufferPool#BLOCK_SIZE}.
-	 * 
+	 *
 	 * @return an array of {@link HeapRecord} objects
 	 */
 	public HeapRecord[] getBlockLeaders()
