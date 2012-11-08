@@ -29,7 +29,7 @@ public class HeapSorter
 	 */
 	public HeapSorter(RecordCollection<HeapRecord> collection)
 	{
-	    heapsort.output.println("New HeapSorter");
+		heapsort.output.println("New HeapSorter");
 		this.collection = collection;
 	}
 
@@ -45,14 +45,14 @@ public class HeapSorter
 		return time;
 	}
 
-
-    // ----------------------------------------------------------
-    /**
-     * Sorts the heap.
-     * @throws HeapException
-     */
-    public void sort() throws HeapException
-    {
+	// ----------------------------------------------------------
+	/**
+	 * Sorts the heap.
+	 * <p/>
+	 * @throws HeapException
+	 */
+	public void sort() throws HeapException
+	{
 		// Get the initial time
 		long startTime = System.currentTimeMillis();
 		heapsort.output.println("Start Sort: " + startTime);
@@ -60,19 +60,22 @@ public class HeapSorter
 		//heapsort.output.println("Now, sort the data...");
 		//sorting stuff here
 		/*long count;
-		for (count = 0; count < collection.getLength(); count++);
-		{
-		    heapsort.output.println(count);
-		}*/
+		 for (count = 0; count < collection.getLength(); count++);
+		 {
+		 heapsort.output.println(count);
+		 }*/
 
-		MaxHeap<HeapRecord> H = new MaxHeap<HeapRecord>(collection, collection.getLength(), collection.getLength());
-        for (int i=0; i < collection.getLength(); i++)  // Sort
-        H.removeMax(); // Removemax places max at end of heap
+		MaxHeap<HeapRecord> H = new MaxHeap<>(collection, collection.getLength(), collection.getLength());
+		for (int i = 0; i < collection.getLength(); i++)
+		{
+			//removeMax places max at end of heap
+			H.removeMax();
+		}
 
 		// Get the end time
 		long endTime = System.currentTimeMillis();
 		// Calculate the total time
 		time = endTime - startTime;
 		heapsort.output.println("Final time in milliseconds: " + time);
-    }
+	}
 }

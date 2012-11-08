@@ -154,6 +154,26 @@ public class BufferPool
 	}
 
 	/**
+	 * Flushes all {@link Buffers} in the pool and closes the source file
+	 * stream.
+	 * <p/>
+	 * @throws IOException
+	 */
+	public void flush() throws IOException
+	{
+		for (Buffer buff : pool)
+		{
+			if (buff.isDirty())
+			{
+				setBytesInFile(buff.bytes(), buff.getNumber() * BLOCK_SIZE);
+				buff.clean();
+			}
+			size--;
+		}
+		file.close();
+	}
+
+	/**
 	 * Get the right {@link Buffer} from the pool given {@code blockNum}. If the
 	 * desired {@link Buffer} is not already in the pool, it must be fetched. If
 	 * the pool is already holding the maximum number of {@link Buffer Buffers},
