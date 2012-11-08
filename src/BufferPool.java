@@ -11,14 +11,14 @@ import java.util.LinkedList;
  * from and to a given source file without having to make disk accesses. The
  * {@code BufferPool} allows portions of a source file to be kept in main memory
  * for faster I/O operations.
- *
+ * <p/>
  * A standard {@link LinkedList} is used to manage in-memory {@link Buffer}
  * objects. The <b>Least Recently Used</b> scheme is used to manage the pool
  * list. Source file I/O requests go through the {@code BufferPool}, which
  * supports direct reading and writing of the source using a
  * {@link RandomAccessFile} through the implementation of {@link Buffer}
  * objects.
- *
+ * <p/>
  * @author orionf22
  * @author rinaldi1
  */
@@ -77,7 +77,7 @@ public class BufferPool
 	 */
 	public BufferPool(int numBuffers, File file) throws FileNotFoundException
 	{
-	    heapsort.output.println("new BufferPool");
+		heapsort.output.println("new BufferPool");
 		pool = new LinkedList<>();
 		POOL_COUNT = numBuffers;
 		this.file = new RandomAccessFile(file, "rw");
@@ -93,6 +93,7 @@ public class BufferPool
 	 * <p/>
 	 * @param start the location within the source from which to start reading
 	 *                 bytes
+	 * <p/>
 	 * @return a byte array containing the bytes from the source from
 	 *            {@code start} to {@code end}
 	 * <p/>
@@ -100,14 +101,14 @@ public class BufferPool
 	 */
 	public byte[] get(int start) throws IOException
 	{
-	    //heapsort.output.println("get from BufferPool");
+		//heapsort.output.println("get from BufferPool");
 		byte[] ret = new byte[IntegerCollection.RECORD_SIZE];
 		int retIndex = 0;
 		for (int i = start; i < start + IntegerCollection.RECORD_SIZE; i++)
 		{
 			//determine which Buffer to look at
 			int blockNum = i / BLOCK_SIZE;
-			Buffer buff = retrieve(blockNum, start);
+			Buffer buff = retrieve(blockNum, blockNum * BLOCK_SIZE);
 			heapsort.output.println(blockNum);
 			//heapsort.output.println("buff.get(" + (i - (blockNum * BLOCK_SIZE)) + ")" );
 			//heapsort.output.println("ret[" + retIndex +"] = buff.get("+ (i - (blockNum * BLOCK_SIZE))+");");
@@ -136,54 +137,20 @@ public class BufferPool
 	 */
 	public void set(byte[] bytes, int start, int end) throws IOException
 	{
-	    heapsort.output.println("set to BufferPool");
-		for (int i = start; i < end; i++)
-		{
-			int blockNum = i / BLOCK_SIZE;
-			Buffer buff = retrieve(blockNum, (start / BLOCK_SIZE) * BLOCK_SIZE);
-			buff.setBytes(bytes);
-			buff.makeDirty();
-		}
-	}
-
-	/**
-	 * Retrieves the number of cache hits this {@code BufferPool} generated.
-	 * <p/>
-	 * @return the cache hit count
-	 */
-	public int getCacheHits()
-	{
-		return this.CACHE_HITS;
-	}
-
-	/**
-	 * Retrieves the number of cache misses this {@code BufferPool} generated.
-	 * <p/>
-	 * @return the cache miss count
-	 */
-	public int getCacheMisses()
-	{
-		return this.CACHE_MISSES;
-	}
-
-	/**
-	 * Retrieves the number of disk reads this {@code BufferPool} made.
-	 * <p/>
-	 * @return the disk read count
-	 */
-	public int getDiskReads()
-	{
-		return this.DISK_READS;
-	}
-
-	/**
-	 * Retrieves the number of disk writes this {@code BufferPool} made.
-	 * <p/>
-	 * @return the disk write count
-	 */
-	public int getDiskWrites()
-	{
-		return this.DISK_WRITES;
+		heapsort.output.println("set to BufferPool");
+		/*
+		 for (int i = start; i < end; i++)
+		 {
+		 int blockNum = i / BLOCK_SIZE;
+		 Buffer buff = retrieve(blockNum, (start / BLOCK_SIZE) * BLOCK_SIZE);
+		 buff.setBytes(bytes);
+		 buff.makeDirty();
+		 }
+		 */
+		int blockNum = start / BLOCK_SIZE;
+		Buffer buff = retrieve(blockNum, blockNum * BLOCK_SIZE);
+		buff.setBytes(bytes);
+		buff.makeDirty();
 	}
 
 	/**
@@ -293,9 +260,12 @@ public class BufferPool
 	 * ending at {@code end}. Data is read from disk in this method as bytes are
 	 * accessed directly from the source file (stored on disk).
 	 * {@link BufferPool#DISK_READS DISK_READS} is incremented.
+	 * <p/>
 	 * @param start the starting index at which to acquire bytes from the source
 	 * @param end   the ending index at which to acquire bytes from the source
+	 * <p/>
 	 * @return the acquired bytes from the source
+	 * <p/>
 	 * @throws IOException
 	 */
 	private byte[] getBytesFromFile(int start) throws IOException
@@ -323,6 +293,7 @@ public class BufferPool
 	 * <p/>
 	 * @param bytes the bytes to write
 	 * @param start the starting index at which to write
+	 * <p/>
 	 * @throws IOException
 	 */
 	private void setBytesInFile(byte[] bytes, int start) throws IOException
@@ -331,5 +302,45 @@ public class BufferPool
 		file.seek(start);
 		file.write(bytes);
 		DISK_WRITES++;
+	}
+
+	/**
+	 * Retrieves the number of cache hits this {@code BufferPool} generated.
+	 * <p/>
+	 * @return the cache hit count
+	 */
+	public int getCacheHits()
+	{
+		return this.CACHE_HITS;
+	}
+
+	/**
+	 * Retrieves the number of cache misses this {@code BufferPool} generated.
+	 * <p/>
+	 * @return the cache miss count
+	 */
+	public int getCacheMisses()
+	{
+		return this.CACHE_MISSES;
+	}
+
+	/**
+	 * Retrieves the number of disk reads this {@code BufferPool} made.
+	 * <p/>
+	 * @return the disk read count
+	 */
+	public int getDiskReads()
+	{
+		return this.DISK_READS;
+	}
+
+	/**
+	 * Retrieves the number of disk writes this {@code BufferPool} made.
+	 * <p/>
+	 * @return the disk write count
+	 */
+	public int getDiskWrites()
+	{
+		return this.DISK_WRITES;
 	}
 }
