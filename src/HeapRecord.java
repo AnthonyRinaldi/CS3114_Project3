@@ -34,7 +34,7 @@ public class HeapRecord
 
 	/**
 	 * Returns the key of this {@code HeapRecord}.
-	 * 
+	 *
 	 * @return the key
 	 */
 	public int getKey()
@@ -44,7 +44,7 @@ public class HeapRecord
 
 	/**
 	 * Returns the value of this {@code HeapRecord}.
-	 * 
+	 *
 	 * @return the value
 	 */
 	public int getValue()
@@ -55,11 +55,11 @@ public class HeapRecord
 	@Override
 	public int compareTo(HeapRecord o)
 	{
-		if (this.value < o.value)
+		if (this.key < o.key)
 		{
 			return -1;
 		}
-		else if (this.value == o.value)
+		else if (this.key == o.key)
 		{
 			return 0;
 		}

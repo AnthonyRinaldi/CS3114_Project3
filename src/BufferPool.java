@@ -108,6 +108,7 @@ public class BufferPool
 			//determine which Buffer to look at
 			int blockNum = i / BLOCK_SIZE;
 			Buffer buff = retrieve(blockNum, start);
+			heapsort.output.println(blockNum);
 			//heapsort.output.println("buff.get(" + (i - (blockNum * BLOCK_SIZE)) + ")" );
 			//heapsort.output.println("ret[" + retIndex +"] = buff.get("+ (i - (blockNum * BLOCK_SIZE))+");");
 			ret[retIndex] = buff.get(i - (blockNum * BLOCK_SIZE));

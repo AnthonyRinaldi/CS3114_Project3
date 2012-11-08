@@ -59,6 +59,7 @@ public class IntegerCollection
 		byte[] got = new byte[0];
 		try
 		{
+		    heapsort.output.println("pool.get(" + start +")");
 			got = pool.get(start);
 		}
 		catch (IOException ex)
