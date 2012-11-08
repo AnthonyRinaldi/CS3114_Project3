@@ -130,61 +130,70 @@ public class heapsort
 	{
 		long time = sorter.getSortTime();
 		long numBlocks = dataFile.length() / BufferPool.BLOCK_SIZE;
-		FileWriter writer = new FileWriter(statsFile);
-		DecimalFormat formatter = new DecimalFormat("#,###");
-
-		String cacheHits = formatter.format(pool.getCacheHits());
-		String cacheMisses = formatter.format(pool.getCacheMisses());
-		String diskReads = formatter.format(pool.getDiskReads());
-		String diskWrites = formatter.format(pool.getDiskWrites());
-
-		//determine how many digits are in each stat
-		int cacheHitLength = cacheHits.length();
-		int diskReadLength = diskReads.length();
-		int cacheMissLength = cacheMisses.length();
-		int diskWriteLength = diskWrites.length();
-
-		//String-ify stats
-		String cacheHitStats = "Cache hits: ";
-		String cacheMissStats = "Cache misses: ";
-		String diskReadStats = "Disk Reads: ";
-		//disk writes needs an extra space because it does not line evenly with 
-		//cache misses (it is one character off):
-		//     Cache misses:
-		//     Disk writes:
-		String diskWriteStats = "Disk Writes:  ";
-
-		//these if statements check to see which stat has more digits
-		if (cacheHitLength > diskReadLength)
+		System.out.println(statsFile.length());
+		try (FileWriter writer = new FileWriter(statsFile))
 		{
-			diskReadStats += " " + padInteger(diskReads, cacheHitLength) + "  ";
-			cacheHitStats += " " + cacheHits + "  ";
-		}
-		else
-		{
-			diskReadStats += " " + diskReads + "  ";
-			cacheHitStats += " " + padInteger(cacheHits, diskReadLength) + "  ";
-		}
+			DecimalFormat formatter = new DecimalFormat("#,###");
 
-		if (cacheMissLength > diskWriteLength)
-		{
-			cacheMissStats += " " + cacheMisses + "  \n";
-			diskWriteStats += " " + padInteger(diskWrites, cacheMissLength)
-					+ "  \n";
-		}
-		else
-		{
-			cacheMissStats += " " + padInteger(cacheMisses, diskWriteLength)
-					+ "  \n";
-			diskWriteStats += " " + diskWrites + "  \n";
-		}
+			String cacheHits = formatter.format(pool.getCacheHits());
+			String cacheMisses = formatter.format(pool.getCacheMisses());
+			String diskReads = formatter.format(pool.getDiskReads());
+			String diskWrites = formatter.format(pool.getDiskWrites());
 
-		try (BufferedWriter bWriter = new BufferedWriter(writer))
-		{
-			bWriter.write(dataFile.getName() + ", with " + numBlocks
-					+ " blocks and " + buffers + " buffers\n");
-			bWriter.write(cacheHitStats + cacheMissStats + diskReadStats
-					+ diskWriteStats + "Time: " + time + "\n");
+			//determine how many digits are in each stat
+			int cacheHitLength = cacheHits.length();
+			int diskReadLength = diskReads.length();
+			int cacheMissLength = cacheMisses.length();
+			int diskWriteLength = diskWrites.length();
+
+			//String-ify stats
+			String cacheHitStats = "Cache hits:";
+			String cacheMissStats = "Cache misses:";
+			String diskReadStats = "Disk Reads:";
+			//disk writes needs an extra space because it does not line evenly with 
+			//cache misses (it is one character off):
+			//     Cache misses:
+			//     Disk writes:
+			String diskWriteStats = "Disk Writes: ";
+
+			//these if statements check to see which stat has more digits
+			if (cacheHitLength > diskReadLength)
+			{
+				diskReadStats += " " + padInteger(diskReads, cacheHitLength) + "  ";
+				cacheHitStats += " " + cacheHits + "  ";
+			}
+			else
+			{
+				diskReadStats += " " + diskReads + "  ";
+				cacheHitStats += " " + padInteger(cacheHits, diskReadLength) + "  ";
+			}
+
+			if (cacheMissLength > diskWriteLength)
+			{
+				cacheMissStats += " " + cacheMisses + "  \n";
+				diskWriteStats += " " + padInteger(diskWrites, cacheMissLength)
+						+ "  \n";
+			}
+			else
+			{
+				cacheMissStats += " " + padInteger(cacheMisses, diskWriteLength)
+						+ "  \n";
+				diskWriteStats += " " + diskWrites + "  \n";
+			}
+
+			try (BufferedWriter bWriter = new BufferedWriter(writer))
+			{
+				bWriter.write(dataFile.getName() + ", with " + numBlocks
+						+ " blocks and " + buffers + " buffers\n");
+				bWriter.write(cacheHitStats + cacheMissStats + diskReadStats
+						+ diskWriteStats + "Time: " + time + "\n");
+				System.out.println(dataFile.getName() + ", with " + numBlocks
+						+ " blocks and " + buffers + " buffers\n" + cacheHitStats + cacheMissStats + diskReadStats
+						+ diskWriteStats + "Time: " + time + "\n");
+				bWriter.close();
+			}
+			writer.close();
+			System.out.println(statsFile.length());
 		}
 	}
 
@@ -204,7 +213,7 @@ public class heapsort
 		for (int i = 0; i < leaders.length; i++)
 		{
 			HeapRecord curr = leaders[i];
-			output.printf("%f %f  ", curr.getKey(), curr.getValue());
+			output.printf("%d %d  ", curr.getKey(), curr.getValue());
 			eigth++;
 			if (eigth == 8)
 			{
@@ -228,7 +237,7 @@ public class heapsort
 		int numDecimals = val.length();
 		String ret = "";
 		//add padding blanks
-		for (int i = numDecimals; i <= padTo; i++)
+		for (int i = numDecimals; i < padTo; i++)
 		{
 			ret += " ";
 		}
@@ -240,6 +249,8 @@ public class heapsort
 	{
 		if (args == null || args.length < 1)
 		{
+			output.println("No arguments found. Call as heapsort "
+					+ "<data-file-path> <num-buffers> <stats-file-path>");
 			return false;
 		}
 		else

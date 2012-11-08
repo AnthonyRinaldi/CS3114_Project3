@@ -144,6 +144,10 @@ public class IntegerCollection
 	{
 		int fileLength = (int) length;
 		int numBlocks = (int) (length / BufferPool.BLOCK_SIZE);
+		if (numBlocks == 0)
+		{
+			numBlocks = 1;
+		}
 		HeapRecord[] ret = new HeapRecord[numBlocks];
 		int retIndex = 0;
 		for (int i = 0; i < fileLength; i += BufferPool.BLOCK_SIZE)

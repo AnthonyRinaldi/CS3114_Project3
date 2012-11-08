@@ -112,7 +112,7 @@ public class BufferPool
 			//heapsort.output.println(blockNum);
 			//heapsort.output.println("buff.get(" + (i - (blockNum * BLOCK_SIZE)) + ")" );
 			//heapsort.output.println("ret[" + retIndex +"] = buff.get("+ (i - (blockNum * BLOCK_SIZE))+");");
-			heapsort.output.println("ret[" + retIndex +"] = buff.get(" + i + " - (" + blockNum + " * " + BLOCK_SIZE +"));");
+			//heapsort.output.println("ret[" + retIndex +"] = buff.get(" + i + " - (" + blockNum + " * " + BLOCK_SIZE +"));");
 			ret[retIndex] = buff.get(i - (blockNum * BLOCK_SIZE));
 			retIndex++;
 		}
