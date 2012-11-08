@@ -100,7 +100,7 @@ public class BufferPool
 	 */
 	public byte[] get(int start) throws IOException
 	{
-	    heapsort.output.println("get from BufferPool");
+	    //heapsort.output.println("get from BufferPool");
 		byte[] ret = new byte[IntegerCollection.RECORD_SIZE];
 		int retIndex = 0;
 		for (int i = start; i < start + IntegerCollection.RECORD_SIZE; i++)
@@ -109,6 +109,7 @@ public class BufferPool
 			int blockNum = i / BLOCK_SIZE;
 			Buffer buff = retrieve(blockNum, start);
 			//heapsort.output.println("buff.get(" + (i - (blockNum * BLOCK_SIZE)) + ")" );
+			//heapsort.output.println("ret[" + retIndex +"] = buff.get("+ (i - (blockNum * BLOCK_SIZE))+");");
 			ret[retIndex] = buff.get(i - (blockNum * BLOCK_SIZE));
 			retIndex++;
 		}
@@ -304,7 +305,7 @@ public class BufferPool
 		byte[] ret = new byte[BLOCK_SIZE];
 		int retIndex = 0;
 		//heapsort.output.println("BufferPool: end = " + end + "\n" +  "start = " + start);
-		for (int i = start; i < start + BLOCK_SIZE; i++)
+		for (int i = start; i < start + BLOCK_SIZE && i < file.length(); i++)
 		{
 			ret[retIndex] = file.readByte();
 			retIndex++;

@@ -71,6 +71,7 @@ public class Buffer
 	 */
 	public byte get(int index)
 	{
+	    //heapsort.output.println("Buffer, get, array size == "+ bytes.length);
 		return bytes[index];
 	}
 

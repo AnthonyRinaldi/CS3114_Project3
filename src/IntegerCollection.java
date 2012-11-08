@@ -104,7 +104,7 @@ public class IntegerCollection
 		}
 		//bit shifting; yay!
 		int key = bytes[1] + (bytes[0] << 8);
-		int value = bytes[4] + (bytes[3] << 8);
+		int value = bytes[3] + (bytes[2] << 8);
 		return new HeapRecord(key, value);
 	}
 
