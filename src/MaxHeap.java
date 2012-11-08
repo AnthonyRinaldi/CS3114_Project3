@@ -51,7 +51,6 @@ public class MaxHeap<E extends Comparable<? super E>>
 	{
 		this.heap = c;
 		this.n = (int) num;
-		heapsort.output.println("MaxHeap Collection Length: " + n);
 		this.size = max;
 		buildHeap();
 	}
@@ -194,7 +193,7 @@ public class MaxHeap<E extends Comparable<? super E>>
 		while (!isLeaf(pos))
 		{
 			int j = leftChild(pos);
-			if ((j < (n - 1)) && (heap.get(j).compareTo(heap.get(j+1)) < 0))
+			if ((j < (n - 1)) && (heap.get(j).compareTo(heap.get(j + 1)) < 0))
 			{
 				j++; // index of child w/ greater value
 			}
