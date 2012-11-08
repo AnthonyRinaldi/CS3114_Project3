@@ -221,7 +221,7 @@ public class MaxHeap<E extends Comparable<? super E>>
 	{
 		if (n >= size)
 		{
-			throw new IllegalHeapStateException("Attempting to insert into a full heap: " + val);
+			throw new IllegalHeapStateException("Attempted to insert into a full heap: " + val);
 		}
 		int curr = n++;
 		heap.set(val, curr);

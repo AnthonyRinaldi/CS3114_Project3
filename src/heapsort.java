@@ -130,7 +130,6 @@ public class heapsort
 	{
 		long time = sorter.getSortTime();
 		long numBlocks = dataFile.length() / BufferPool.BLOCK_SIZE;
-		System.out.println(statsFile.length());
 		try (FileWriter writer = new FileWriter(statsFile))
 		{
 			DecimalFormat formatter = new DecimalFormat("#,###");
@@ -187,13 +186,7 @@ public class heapsort
 						+ " blocks and " + buffers + " buffers\n");
 				bWriter.write(cacheHitStats + cacheMissStats + diskReadStats
 						+ diskWriteStats + "Time: " + time + "\n");
-				System.out.println(dataFile.getName() + ", with " + numBlocks
-						+ " blocks and " + buffers + " buffers\n" + cacheHitStats + cacheMissStats + diskReadStats
-						+ diskWriteStats + "Time: " + time + "\n");
-				bWriter.close();
 			}
-			writer.close();
-			System.out.println(statsFile.length());
 		}
 	}
 

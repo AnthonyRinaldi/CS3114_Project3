@@ -1,4 +1,4 @@
 txt.txt, with 1 blocks and 1 buffers
-Cache hits: 141  Cache misses: 1  
+Cache hits: 161  Cache misses: 1  
 Disk Reads:   1  Disk Writes:  1  
-Time: 4
+Time: 5

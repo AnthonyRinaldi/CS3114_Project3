@@ -61,6 +61,7 @@ public class Buffer
 	{
 		int bIndex = 0;
 		int size = b.length;
+		System.out.println("\treplace [" + start + ", " + (start + size) + "]");
 		for (int i = start; i < start + size; i++)
 		{
 			bytes[i] = b[bIndex];
