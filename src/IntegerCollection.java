@@ -29,7 +29,7 @@ public class IntegerCollection
 	 * The {@link BufferPool} utilized by this {@code IntegerCollection}.
 	 */
 	private BufferPool pool;
-    private long length;
+	private long length;
 	/**
 	 * The static size of managed records, in bytes. For Project 3, this is 4.
 	 */
@@ -39,7 +39,8 @@ public class IntegerCollection
 	 * Constructs a new {@code IntegerCollection} given a
 	 * {@link BufferPool} {@code p}. The size of the pool is not determined
 	 * here; it is determined higher up the hierarchy.
-	 * @param p the {@link BufferPool} to use
+	 * <p/>
+	 * @param p      the {@link BufferPool} to use
 	 * @param length
 	 */
 	public IntegerCollection(BufferPool p, long length)
@@ -59,7 +60,7 @@ public class IntegerCollection
 		byte[] got = new byte[0];
 		try
 		{
-		    heapsort.output.println("pool.get(" + start +")");
+			heapsort.output.println("pool.get(" + start + ")");
 			got = pool.get(start);
 		}
 		catch (IOException ex)
@@ -132,24 +133,37 @@ public class IntegerCollection
 		}
 		return ret;
 	}
-/*
-	@Override
-	public void swap(int first, int second)
+
+	/**
+	 * Acquires the first record in each block of the file. A block's size is
+	 * dependent upon the value of {@link BufferPool#BLOCK_SIZE}.
+	 * 
+	 * @return an array of {@link HeapRecord} objects
+	 */
+	public HeapRecord[] getBlockLeaders()
 	{
-		//hold the two records
-		HeapRecord f = get(first);
-		HeapRecord s = get(second);
-		//put first record in second position
-		set(f, second);
-		//put second record in first position
-		set(s, first);
+		int fileLength = (int) length;
+		int numBlocks = (int) (length / BufferPool.BLOCK_SIZE);
+		HeapRecord[] ret = new HeapRecord[numBlocks];
+		int retIndex = 0;
+		for (int i = 0; i < fileLength; i += BufferPool.BLOCK_SIZE)
+		{
+			try
+			{
+				ret[retIndex] = decode(pool.get(i));
+				retIndex++;
+			}
+			catch (IOException ex)
+			{
+				Logger.getLogger(IntegerCollection.class.getName()).log(Level.SEVERE, null, ex);
+			}
+		}
+		return ret;
+	}
 
-	}*/
-
-
-    public long getLength()
-    {
-        return length;
-    }
-
+	@Override
+	public long getLength()
+	{
+		return length;
+	}
 }

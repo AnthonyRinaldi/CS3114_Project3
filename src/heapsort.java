@@ -69,6 +69,11 @@ public class heapsort
 	 */
 	private static HeapSorter sorter;
 	/**
+	 * The {@link IntegerCollection} serving as the interface between the pool
+	 * and the sorter.
+	 */
+	private static IntegerCollection collection;
+	/**
 	 * The {@link BufferPool} mediating disk accesses.
 	 */
 	private static BufferPool pool;
@@ -97,12 +102,14 @@ public class heapsort
 		{
 			pool = new BufferPool(buffers, dataFile);
 			output.println("Input File Size: " + dataFile.length());
-			sorter = new HeapSorter(new IntegerCollection(pool, dataFile.length()));
+			collection = new IntegerCollection(pool, dataFile.length());
+			sorter = new HeapSorter(collection);
 			//SORT!
 			sorter.sort();
 			//flush the pool prior to writing stats
 			pool.flush();
 			writeStats();
+			reportBlockLeaders();
 		}
 		output.println("End Program");
 	}
@@ -113,9 +120,9 @@ public class heapsort
 	 * also with respect to cache misses and disk writes. These two sets of
 	 * values are written "one on top of another" meaning one value appears on
 	 * the next line. Example:
-	 * 
-	 * Cache hits: 123,456  Cache misses:    12,345
-	 * Disk Reads:  34,567  Disk Writes:  1,234,567
+	 * <p/>
+	 * Cache hits: 123,456 Cache misses: 12,345 Disk Reads: 34,567 Disk Writes:
+	 * 1,234,567
 	 * <p/>
 	 * @throws IOException
 	 */
@@ -178,6 +185,32 @@ public class heapsort
 					+ " blocks and " + buffers + " buffers\n");
 			bWriter.write(cacheHitStats + cacheMissStats + diskReadStats
 					+ diskWriteStats + "Time: " + time + "\n");
+		}
+	}
+
+	/**
+	 * Fetches the block leading {@link HeapRecords} from the pool via the
+	 * {@link IntegerCollection}. Each record is right justified so all values
+	 * in the key and value columns line up. Each record's values are separated
+	 * from the next record by two spaces and a newline is inserted after every
+	 * eigth record.
+	 */
+	private static void reportBlockLeaders()
+	{
+		HeapRecord[] leaders = collection.getBlockLeaders();
+		//determines when eigth records have been printed to a line so the next
+		//eigth records will be printed on a new line
+		int eigth = 1;
+		for (int i = 0; i < leaders.length; i++)
+		{
+			HeapRecord curr = leaders[i];
+			output.printf("%f %f  ", curr.getKey(), curr.getValue());
+			eigth++;
+			if (eigth == 8)
+			{
+				output.println();
+				eigth = 0;
+			}
 		}
 	}
 
