@@ -71,6 +71,32 @@ public class heapsort
 		long numBlocks = dataFile.length() / BufferPool.BLOCK_SIZE;
 		FileWriter writer = new FileWriter(statsFile);
 
+		int cacheHits = pool.getCacheHits();
+		int cacheMisses = pool.getCacheMisses();
+		int diskReads = pool.getDiskReads();
+		int diskWrites = pool.getDiskWrites();
+		
+		int cacheHitLength = String.valueOf(cacheHits).length();
+		int diskReadLength = String.valueOf(diskReads).length();
+		int cacheMissLength = String.valueOf(cacheMisses).length();
+		int diskWriteLength = String.valueOf(diskWrites).length();
+		
+		String cacheHitStats = "Cache hits: ";
+		String cacheMissStats = "Cache misses: ";
+		String diskReadStats = "Disk Reads: ";
+		String diskWriteStats = "Disk Writes: ";
+		
+		if (cacheHitLength > diskReadLength)
+		{
+			diskReadStats += " " + padInteger(diskReads, diskReadLength) + "  ";
+			cacheHitStats += " " + cacheHits + "  ";
+		}
+		
+		if (cacheMissLength > diskWriteLength)
+		{
+			
+		}
+		
 		try (BufferedWriter bWriter = new BufferedWriter(writer))
 		{
 			bWriter.write(dataFile.getName() + ", with " + numBlocks
@@ -79,6 +105,28 @@ public class heapsort
 					+ "  Cache misses: " + pool.getCacheMisses()
 					+ "");
 		}
+	}
+	
+	/**
+	 * Adds {@code padTo} blanks to pad {@code val}.
+	 * 
+	 * @param val the number to pad
+	 * @param padTo the number of blanks to insert before {@code val}
+	 * 
+	 * @return a String representation of the padded value
+	 */
+	private static String padInteger(int val, int padTo)
+	{
+		//determine how many digits are in val
+		int numDecimals = String.valueOf(val).length();
+		String ret = "";
+		//add padding blanks
+		for (int i = numDecimals; i <= padTo; i++)
+		{
+			ret += " ";
+		}
+		//add val at the end
+		return ret += val;
 	}
 
 	private static boolean parseArgs(String[] args)
