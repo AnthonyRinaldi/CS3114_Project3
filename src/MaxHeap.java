@@ -18,7 +18,7 @@ public class MaxHeap<E extends Comparable<? super E>>
 	/**
 	 * Number of records currently in the heap.
 	 */
-	private int length;
+	private int n;
 	/**
 	 * Maximum allowable size of the heap, in terms of number of records.
 	 * THIS IS ALSO THE NUMBER OF ENTRIES IN THE ARRAY!!!
@@ -50,8 +50,8 @@ public class MaxHeap<E extends Comparable<? super E>>
 	public MaxHeap(RecordCollection<E> c, long num, long max) throws HeapException
 	{
 		this.heap = c;
-		this.length = (int) num;
-		heapsort.output.println("MaxHeap Collection Length: " + length);
+		this.n = (int) num;
+		heapsort.output.println("MaxHeap Collection Length: " + n);
 		this.size = max;
 		buildHeap();
 	}
@@ -69,7 +69,7 @@ public class MaxHeap<E extends Comparable<? super E>>
 	 */
 	private void buildHeap() throws HeapException
 	{
-		for (int i = length / 2 - 1; i >= 0; i--)
+		for (int i = n / 2 - 1; i >= 0; i--)
 		{
 			siftDown(i);
 		}
@@ -83,7 +83,7 @@ public class MaxHeap<E extends Comparable<? super E>>
 	 */
 	private boolean isLeaf(int pos)
 	{
-		return (pos >= length / 2) && (pos < length);
+		return (pos >= n / 2) && (pos < n);
 	}
 
 	/**
@@ -96,7 +96,7 @@ public class MaxHeap<E extends Comparable<? super E>>
 	 */
 	private int leftChild(int pos)
 	{
-		assert pos < length / 2 : "Position has no left child";
+		assert pos < n / 2 : "Position has no left child";
 		return 2 * pos + 1;
 	}
 
@@ -110,7 +110,7 @@ public class MaxHeap<E extends Comparable<? super E>>
 	 */
 	private int rightChild(int pos)
 	{
-		assert pos < (length - 1) / 2 : "Position has no right child";
+		assert pos < (n - 1) / 2 : "Position has no right child";
 		return 2 * pos + 2;
 	}
 
@@ -138,17 +138,17 @@ public class MaxHeap<E extends Comparable<? super E>>
 	 */
 	public E removeMax() throws HeapException
 	{
-		if (length < 0)
+		if (n < 0)
 		{
 			throw new IllegalHeapStateException("Attempting to operate on an empty heap");
 		}
 		//swaps the largest value (always at the root) with the last value
-		swap(heap, 0, --length);
-		if (length != 0)
+		swap(heap, 0, --n);
+		if (n != 0)
 		{
 			siftDown(0);
 		}
-		return heap.get(length);
+		return heap.get(n);
 
 	}
 
@@ -170,7 +170,7 @@ public class MaxHeap<E extends Comparable<? super E>>
 	 */
 	public int length()
 	{
-		return length;
+		return n;
 	}
 
 	/**
@@ -187,14 +187,14 @@ public class MaxHeap<E extends Comparable<? super E>>
 	{
 	    //heapsort.output.println("siftDown");
 	    //int pos = i; // You should not be touching the value of input values.
-		if ((pos >= length) || (pos < 0))
+		if ((pos >= n) || (pos < 0))
 		{
 			throw new IllegalHeapPositionException("Illegal Heap position: " + pos);
 		}
 		while (!isLeaf(pos))
 		{
 			int j = leftChild(pos);
-			if ((j < (length - 1)) && (heap.get(j-1).compareTo(heap.get(j)) < 0))
+			if ((j < (n - 1)) && (heap.get(j).compareTo(heap.get(j+1)) < 0))
 			{
 				j++; // index of child w/ greater value
 			}
@@ -210,7 +210,7 @@ public class MaxHeap<E extends Comparable<? super E>>
 	/**
 	 * Attempts to insert {@code val} into the heap. If the heap is already
 	 * full, that is, if the number of items in the heap
-	 * ({@link MaxHeap#length length}) is equal to the maximum size the heap can
+	 * ({@link MaxHeap#n length}) is equal to the maximum size the heap can
 	 * store ({@link MaxHeap#size size}) then the insert will be rejected.
 	 * Otherwise insertion occurs as per max-heap standards.
 	 * <p/>
@@ -220,11 +220,11 @@ public class MaxHeap<E extends Comparable<? super E>>
 	 */
 	public void insert(E val) throws IllegalHeapStateException
 	{
-		if (length >= size)
+		if (n >= size)
 		{
 			throw new IllegalHeapStateException("Attempting to insert into a full heap: " + val);
 		}
-		int curr = length++;
+		int curr = n++;
 		heap.set(val, curr);
 		// Siftup until curr parent's key > curr key
 		while ((curr != 0) && (heap.get(curr).compareTo(heap.get(parent(curr))) > 0))
