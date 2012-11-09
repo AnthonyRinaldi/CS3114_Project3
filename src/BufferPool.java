@@ -138,19 +138,14 @@ public class BufferPool
 	 */
 	public void set(byte[] bytes, int start, int end) throws IOException
 	{
-		//heapsort.output.println("set to BufferPool");
-		/*
-		 for (int i = start; i < end; i++)
-		 {
-		 int blockNum = i / BLOCK_SIZE;
-		 Buffer buff = retrieve(blockNum, (start / BLOCK_SIZE) * BLOCK_SIZE);
-		 buff.setBytes(bytes);
-		 buff.makeDirty();
-		 }
-		 */
 		int blockNum = start / BLOCK_SIZE;
 		Buffer buff = retrieve(blockNum, blockNum * BLOCK_SIZE);
-		buff.setBytes(bytes, start);
+		int newStart = start;
+		if (blockNum != 0)
+		{
+			newStart = start % BLOCK_SIZE;
+		}
+		buff.setBytes(bytes, newStart);
 		buff.makeDirty();
 		//this.flush();
 	}
@@ -170,7 +165,6 @@ public class BufferPool
 				setBytesInFile(buff.bytes(), buff.getNumber() * BLOCK_SIZE);
 				buff.clean();
 			}
-			size--;
 		}
 		file.close();
 	}

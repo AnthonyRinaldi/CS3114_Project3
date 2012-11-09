@@ -154,12 +154,12 @@ public class MaxHeap<E extends Comparable<? super E>>
 	/**
      * Swaps the posn1, posn2value in the array hp
      */
-    private void swap(RecordCollection<E> hp, int posn1, int length2)
+    private void swap(RecordCollection<E> rc, int first, int second)
     {
-        E record1 = hp.get(posn1);
-        E record2 = hp.get(length2);
-        hp.set(record1, length2);
-        hp.set(record2, posn1);
+        E record1 = rc.get(first);
+        E record2 = rc.get(second);
+        rc.set(record1, second);
+        rc.set(record2, first);
     }
 
 	/**
