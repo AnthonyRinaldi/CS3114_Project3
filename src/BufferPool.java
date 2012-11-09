@@ -1,4 +1,5 @@
 
+import java.util.Arrays;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -138,6 +139,7 @@ public class BufferPool
 	 */
 	public void set(byte[] bytes, int start, int end) throws IOException
 	{
+
 		int blockNum = start / BLOCK_SIZE;
 		Buffer buff = retrieve(blockNum, blockNum * BLOCK_SIZE);
 		int newStart = start;
@@ -166,7 +168,7 @@ public class BufferPool
 			}
 		}
 	}
-	
+
 	public void closeSourceStream() throws IOException
 	{
 		file.close();

@@ -1,3 +1,5 @@
+import java.util.Arrays;
+
 
 /**
  * {@code Buffer} objects manage an array of bytes. They are capable of reading
@@ -56,9 +58,11 @@ public class Buffer
 	 * Assigns {@code bytes} to this {@code Buffer}.
 	 * <p/>
 	 * @param b the new byte array to manage
+	 * @param start
 	 */
 	public void setBytes(byte[] b, int start)
 	{
+	    heapsort.output.println("Old: " + Arrays.toString(b));
 		int bIndex = 0;
 		int size = b.length;
 		System.out.println("\treplace [" + start + ", " + (start + size) + "] in " + number);
@@ -67,6 +71,7 @@ public class Buffer
 			bytes[i] = b[bIndex];
 			bIndex++;
 		}
+		heapsort.output.println("New: " + Arrays.toString(b));
 	}
 
 	/**
