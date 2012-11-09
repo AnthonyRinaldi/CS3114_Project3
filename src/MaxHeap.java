@@ -51,7 +51,6 @@ public class MaxHeap<E extends Comparable<? super E>>
 	{
 		this.heap = c;
 		this.n = (int) num;
-		System.out.println("\t org n: " + n);
 		this.size = max;
 		buildHeap();
 	}

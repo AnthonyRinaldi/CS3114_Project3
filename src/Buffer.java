@@ -65,7 +65,6 @@ public class Buffer
 	    heapsort.output.println("Old: " + Arrays.toString(b));
 		int bIndex = 0;
 		int size = b.length;
-		System.out.println("\treplace [" + start + ", " + (start + size) + ") in " + number);
 		for (int i = start; i < start + size; i++)
 		{
 			bytes[i] = b[bIndex];

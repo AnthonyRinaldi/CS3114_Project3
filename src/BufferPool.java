@@ -110,10 +110,6 @@ public class BufferPool
 			//determine which Buffer to look at
 			int blockNum = i / BLOCK_SIZE;
 			Buffer buff = retrieve(blockNum, blockNum * BLOCK_SIZE);
-			//heapsort.output.println(blockNum);
-			//heapsort.output.println("buff.get(" + (i - (blockNum * BLOCK_SIZE)) + ")" );
-			//heapsort.output.println("ret[" + retIndex +"] = buff.get("+ (i - (blockNum * BLOCK_SIZE))+");");
-			//heapsort.output.println("ret[" + retIndex +"] = buff.get(" + i + " - (" + blockNum + " * " + BLOCK_SIZE +"));");
 			ret[retIndex] = buff.get(i - (blockNum * BLOCK_SIZE));
 			retIndex++;
 		}
@@ -149,7 +145,6 @@ public class BufferPool
 		}
 		buff.setBytes(bytes, newStart);
 		buff.makeDirty();
-		//this.flush();
 	}
 
 	/**
@@ -163,7 +158,6 @@ public class BufferPool
 		{
 			if (buff.isDirty())
 			{
-				System.out.println("dirty");
 				setBytesInFile(buff.bytes(), buff.getNumber() * BLOCK_SIZE);
 				buff.clean();
 			}
@@ -248,7 +242,7 @@ public class BufferPool
 			Buffer removed = pool.removeLast();
 			if (removed.isDirty())
 			{
-				setBytesInFile(removed.bytes(), start);
+				setBytesInFile(removed.bytes(), removed.getNumber() * BLOCK_SIZE);
 				removed.clean();
 			}
 			//decrement size, knowing it will be incremented next anyway. This
@@ -297,8 +291,7 @@ public class BufferPool
 		//allocate byte array
 		byte[] ret = new byte[BLOCK_SIZE];
 		int retIndex = 0;
-		//heapsort.output.println("BufferPool: end = " + end + "\n" +  "start = " + start);
-		for (int i = start; i < BLOCK_SIZE; i++)
+		for (int i = start; i < start + BLOCK_SIZE; i++)
 		{
 			ret[retIndex] = file.readByte();
 			retIndex++;

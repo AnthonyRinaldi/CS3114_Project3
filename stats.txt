@@ -11,3 +11,113 @@ Cache hits: 352  Cache misses: 2
 >>>>>>> 56732ac68681250c6516f30de21b11c7b9da1470
 Disk Reads:   2  Disk Writes:  2  
 Time: 8
+txt.txt, with 2 blocks and 2 buffers
+Cache hits: 360  Cache misses: 2  
+Disk Reads:   2  Disk Writes:  2  
+Time: 8
+
+txt.txt, with 2 blocks and 2 buffers
+Cache hits: 254  Cache misses: 2  
+Disk Reads:   2  Disk Writes:  2  
+Time: 6
+
+txt.txt, with 2 blocks and 2 buffers
+Cache hits: 360  Cache misses: 2  
+Disk Reads:   2  Disk Writes:  2  
+Time: 15
+
+txt.txt, with 2 blocks and 2 buffers
+Cache hits: 254  Cache misses: 2  
+Disk Reads:   2  Disk Writes:  2  
+Time: 6
+
+txt.txt, with 2 blocks and 2 buffers
+Cache hits: 254  Cache misses: 2  
+Disk Reads:   2  Disk Writes:  2  
+Time: 6
+
+txt.txt, with 2 blocks and 2 buffers
+Cache hits: 254  Cache misses: 2  
+Disk Reads:   2  Disk Writes:  2  
+Time: 8
+
+txt.txt, with 2 blocks and 2 buffers
+Cache hits: 352  Cache misses: 2  
+Disk Reads:   2  Disk Writes:  2  
+Time: 8
+
+txt.txt, with 2 blocks and 2 buffers
+Cache hits: 254  Cache misses: 2  
+Disk Reads:   2  Disk Writes:  2  
+Time: 7
+
+txt.txt, with 2 blocks and 2 buffers
+Cache hits: 360  Cache misses: 2  
+Disk Reads:   2  Disk Writes:  2  
+Time: 8
+
+txt.txt, with 2 blocks and 2 buffers
+Cache hits: 254  Cache misses: 2  
+Disk Reads:   2  Disk Writes:  2  
+Time: 6
+
+txt.txt, with 2 blocks and 2 buffers
+Cache hits: 360  Cache misses: 2  
+Disk Reads:   2  Disk Writes:  2  
+Time: 11
+
+txt.txt, with 2 blocks and 2 buffers
+Cache hits: 408  Cache misses: 2  
+Disk Reads:   2  Disk Writes:  2  
+Time: 19
+
+txt.txt, with 2 blocks and 2 buffers
+Cache hits: 400  Cache misses: 2  
+Disk Reads:   2  Disk Writes:  2  
+Time: 10
+
+txt.txt, with 2 blocks and 2 buffers
+Cache hits: 430  Cache misses: 2  
+Disk Reads:   2  Disk Writes:  2  
+Time: 15
+
+txt.txt, with 2 blocks and 3 buffers
+Cache hits: 430  Cache misses: 2  
+Disk Reads:   2  Disk Writes:  2  
+Time: 12
+
+txt.txt, with 2 blocks and 1 buffers
+Cache hits: 309  Cache misses: 39  
+Disk Reads:  39  Disk Writes:  14  
+Time: 27
+
+txt.txt, with 2 blocks and 1 buffers
+Cache hits: 309  Cache misses: 39  
+Disk Reads:  39  Disk Writes:  14  
+Time: 22
+
+txt.txt, with 2 blocks and 1 buffers
+Cache hits: 341  Cache misses: 35  
+Disk Reads:  35  Disk Writes:  15  
+Time: 26
+
+txt.txt, with 2 blocks and 1 buffers
+Cache hits: 281  Cache misses: 29  
+Disk Reads:  29  Disk Writes:  11  
+Time: 6
+
+txt.txt, with 2 blocks and 1 buffers
+Cache hits: 331  Cache misses: 33  
+Disk Reads:  33  Disk Writes:  12  
+Time: 8
+
+txt.txt, with 2 blocks and 1 buffers
+Cache hits: 321  Cache misses: 35  
+Disk Reads:  35  Disk Writes:  13  
+Time: 11
+
+txt.txt, with 2 blocks and 1 buffers
+Cache hits: 391  Cache misses: 41  
+Disk Reads:  41  Disk Writes:  19  
+Time: 7
+

@@ -67,6 +67,5 @@ public class HeapSorter
 		// Calculate the total time
 		time = endTime - startTime;
 		heapsort.output.println("Final time in ms: " + time);
-		System.out.println(H.length());
 	}
 }
