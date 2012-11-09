@@ -161,6 +161,7 @@ public class BufferPool
 		{
 			if (buff.isDirty())
 			{
+				System.out.println("dirty");
 				setBytesInFile(buff.bytes(), buff.getNumber() * BLOCK_SIZE);
 				buff.clean();
 			}
