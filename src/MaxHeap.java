@@ -6,8 +6,6 @@
  * manage. The heap's length represents the number of records currently managed
  * by the heap and is never allowed to exceed the size.
  * <p/>
- * NOTE: All needed is a method to heapify an array. Simple!
- * <p/>
  * @author rinadli1
  * @author orionf22
  * @param <E> Generic
@@ -21,7 +19,6 @@ public class MaxHeap<E extends Comparable<? super E>>
 	private int n;
 	/**
 	 * Maximum allowable size of the heap, in terms of number of records.
-	 * THIS IS ALSO THE NUMBER OF ENTRIES IN THE ARRAY!!!
 	 */
 	private long size;
 	/**
@@ -29,7 +26,6 @@ public class MaxHeap<E extends Comparable<? super E>>
 	 * the memory storage of the records.
 	 */
 	private RecordCollection<E> heap;
-	//private BufferPool pool;
 
 	/**
 	 * Creates a new {@code MaxHeap} with a specified storage manager
@@ -54,14 +50,6 @@ public class MaxHeap<E extends Comparable<? super E>>
 		this.size = max;
 		buildHeap();
 	}
-	/*
-	public MaxHeap(BufferPool p, int num, int max) throws HeapException
-    {
-        this.pool = p;
-        this.length = num;
-        this.size = max;
-        buildHeap();
-    }*/
 
 	/**
 	 * Attempts to build the heap according to max-heap standards.
@@ -76,7 +64,9 @@ public class MaxHeap<E extends Comparable<? super E>>
 
 	/**
 	 * Determines if a given position is a leaf.
+	 * <p/>
 	 * @param pos the position to analyze
+	 * <p/>
 	 * @return {@code true} if the position is a leaf (it has no children),
 	 *            {@code false} otherwise
 	 */
@@ -133,6 +123,7 @@ public class MaxHeap<E extends Comparable<? super E>>
 	 * {@link HeapException} is thrown.
 	 * <p/>
 	 * @return the largest value in the heap
+	 * <p/>
 	 * @throws HeapException
 	 */
 	public E removeMax() throws HeapException
@@ -152,15 +143,20 @@ public class MaxHeap<E extends Comparable<? super E>>
 	}
 
 	/**
-     * Swaps the posn1, posn2value in the array hp
-     */
-    private void swap(RecordCollection<E> rc, int first, int second)
-    {
-        E record1 = rc.get(first);
-        E record2 = rc.get(second);
-        rc.set(record1, second);
-        rc.set(record2, first);
-    }
+	 * Swaps the record stored at position {@code first} with the record at
+	 * {@code second}.
+	 * 
+	 * @param rc the {@link RecordCollection} used to get and set records
+	 * @param first the first position at which to swap
+	 * @param second the second position at which to swap
+	 */
+	private void swap(RecordCollection<E> rc, int first, int second)
+	{
+		E record1 = rc.get(first);
+		E record2 = rc.get(second);
+		rc.set(record1, second);
+		rc.set(record2, first);
+	}
 
 	/**
 	 * Return the length, or current number of stored records, of the heap.
@@ -184,8 +180,6 @@ public class MaxHeap<E extends Comparable<? super E>>
 	 */
 	private void siftDown(int pos) throws IllegalHeapPositionException
 	{
-	    //heapsort.output.println("siftDown");
-	    //int pos = i; // You should not be touching the value of input values.
 		if ((pos >= n) || (pos < 0))
 		{
 			throw new IllegalHeapPositionException("Illegal Heap position: " + pos);

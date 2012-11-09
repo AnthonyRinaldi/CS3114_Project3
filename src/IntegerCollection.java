@@ -29,7 +29,13 @@ public class IntegerCollection
 	 * The {@link BufferPool} utilized by this {@code IntegerCollection}.
 	 */
 	private BufferPool pool;
+	/**
+	 * The number of records the source file contains.
+	 */
 	private long length;
+	/**
+	 * The byte length of the source file.
+	 */
 	private long originalSourceLength;
 	/**
 	 * The static size of managed records, in bytes. For Project 3, this is 4.
@@ -54,15 +60,13 @@ public class IntegerCollection
 	@Override
 	public HeapRecord get(int recordNum)
 	{
-		//calculate the starting and ending access indeces
+		//calculate the starting index
 		int start = recordNum * RECORD_SIZE;
-		//int end = start + RECORD_SIZE;
 		//if an error occurs while trying to read bytes, this method will return
 		//a zero-sized array; otherwise it will return the desired bytes
 		byte[] got = new byte[0];
 		try
 		{
-			//heapsort.output.println("pool.get(" + start + ")");
 			got = pool.get(start);
 		}
 		catch (IOException ex)
@@ -76,14 +80,13 @@ public class IntegerCollection
 	@Override
 	public void set(HeapRecord element, int recordNum)
 	{
-		//calculate the starting and ending access indeces
+		//calculate the starting index
 		int start = recordNum * RECORD_SIZE;
-		int end = start + RECORD_SIZE;
 		//encode element
 		byte[] setMe = encode(element);
 		try
 		{
-			pool.set(setMe, start, end);
+			pool.set(setMe, start);
 		}
 		catch (IOException ex)
 		{
@@ -107,8 +110,8 @@ public class IntegerCollection
 			return new HeapRecord(-1, -1);
 		}
 		//bit shifting; yay!
-		int key = bytes[1] + (bytes[0] << 8);
-		int value = bytes[3] + (bytes[2] << 8);
+		int key = bytes[1] | (bytes[0] << 8);
+		int value = bytes[3] | (bytes[2] << 8);
 		return new HeapRecord(key, value);
 	}
 
@@ -138,18 +141,20 @@ public class IntegerCollection
 
 	/**
 	 * Acquires the first record in each block of the file. A block's size is
-	 * dependent upon the value of {@link BufferPool#BLOCK_SIZE}.
-	 *
+	 * dependent upon the value of {@link BufferPool#BLOCK_SIZE}. For example,
+	 * if there are 12 blocks in a file, this method will return 12
+	 * {@link HeapRecord} objects.
+	 * <p/>
 	 * @return an array of {@link HeapRecord} objects
 	 */
 	public HeapRecord[] getBlockLeaders()
 	{
 		int numBlocks = (int) (originalSourceLength / BufferPool.BLOCK_SIZE);
+		//there must always be 1 block
 		if (numBlocks == 0)
 		{
 			numBlocks = 1;
 		}
-		//System.out.println("\t" + numBlocks);
 		HeapRecord[] ret = new HeapRecord[numBlocks];
 		int retIndex = 0;
 		for (int i = 0; i < originalSourceLength; i += BufferPool.BLOCK_SIZE)

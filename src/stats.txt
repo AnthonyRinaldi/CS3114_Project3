@@ -1,0 +1,5 @@
+next.txt, with 100 blocks and 20 buffers
+Cache hits: 40,116,617  Cache misses: 2,499  
+Disk Reads:      2,499  Disk Writes:  2,419  
+Time: 2310
+

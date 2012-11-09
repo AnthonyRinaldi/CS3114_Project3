@@ -1,11 +1,10 @@
-import java.util.Arrays;
-
 
 /**
  * {@code Buffer} objects manage an array of bytes. They are capable of reading
  * and writing these bytes, using a {@code boolean} flag {@code isDirty} to
  * determine when the bytes have been modified and need to be updated in the
- * source.
+ * source. However, {@code Buffers} have no concept of what that source is, only
+ * what bytes from that source it needs to manage.
  * <p/>
  * {@code Buffer} objects also have a {@code number} field to denote where a
  * {@code Buffer} falls in line within a source.
@@ -17,7 +16,8 @@ public class Buffer
 {
 
 	/**
-	 * The bytes managed by this {@code Buffer}.
+	 * The bytes managed by this {@code Buffer}. This array is always the length
+	 * of one block, defined by {@link BufferPool#BLOCK_SIZE}.
 	 */
 	private byte[] bytes;
 	/**
@@ -55,10 +55,13 @@ public class Buffer
 	}
 
 	/**
-	 * Assigns {@code bytes} to this {@code Buffer}.
+	 * Replaces select bytes in this {@code Buffer}, starting at {@code start}
+	 * and replacing the corresponding bytes in {@code bytes} with those bytes
+	 * in {@code b}.
 	 * <p/>
-	 * @param b the new byte array to manage
-	 * @param start
+	 * @param b     the bytes to use
+	 * @param start the starting index within {@code bytes} at which overwriting
+	 *                 will begin
 	 */
 	public void setBytes(byte[] b, int start)
 	{
@@ -72,6 +75,18 @@ public class Buffer
 	}
 
 	/**
+	 * Sets the number of this {@code Buffer}. This allows a {@code Buffer}
+	 * object to be recycled rather than garbage collected when pool replacement
+	 * occurs.
+	 * <p/>
+	 * @param n the new number
+	 */
+	public void setNumber(int n)
+	{
+		this.number = n;
+	}
+
+	/**
 	 * Gets a byte from {@link Buffer#bytes} at position {@code index}.
 	 * <p/>
 	 * @param index the index at which to retrieve
@@ -80,7 +95,7 @@ public class Buffer
 	 */
 	public byte get(int index)
 	{
-	    //heapsort.output.println("Buffer, get, array size == "+ bytes.length);
+		//heapsort.output.println("Buffer, get, array size == "+ bytes.length);
 		return bytes[index];
 	}
 

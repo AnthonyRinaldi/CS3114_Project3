@@ -4,9 +4,7 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.nio.file.Files;
 import java.text.DecimalFormat;
-import java.util.Arrays;
 
 // On my honor:
 //
@@ -112,6 +110,7 @@ public class heapsort
 			pool.flush();
 			writeStats();
 			reportBlockLeaders();
+			//finally, close the file stream
 			pool.closeSourceStream();
 		}
 		output.println("End Program");
@@ -122,10 +121,7 @@ public class heapsort
 	 * justification is required with respect to cache hits and disk reads, and
 	 * also with respect to cache misses and disk writes. These two sets of
 	 * values are written "one on top of another" meaning one value appears on
-	 * the next line. Example:
-	 * <p/>
-	 * Cache hits: 123,456 Cache misses: 12,345 Disk Reads: 34,567 Disk Writes:
-	 * 1,234,567
+	 * the next line.
 	 * <p/>
 	 * @throws IOException
 	 */
@@ -194,7 +190,7 @@ public class heapsort
 	}
 
 	/**
-	 * Fetches the block leading {@link HeapRecords} from the pool via the
+	 * Fetches the block-leading {@link HeapRecords} from the pool via the
 	 * {@link IntegerCollection}. Each record is right justified so all values
 	 * in the key and value columns line up. Each record's values are separated
 	 * from the next record by two spaces and a newline is inserted after every
@@ -208,7 +204,6 @@ public class heapsort
 		int eigth = 1;
 		for (int i = 0; i < leaders.length; i++)
 		{
-			System.out.println("\t" + i + "; " + leaders.length);
 			HeapRecord curr = leaders[i];
 			output.printf("%d %d  ", curr.getKey(), curr.getValue());
 			eigth++;
@@ -242,6 +237,15 @@ public class heapsort
 		return ret += val;
 	}
 
+	/**
+	 * Parses the command line arguments to ensure validity. The program will
+	 * not execute if any of the arguments are not properly set.
+	 * <p/>
+	 * @param args the command line arguments
+	 * <p/>
+	 * @return {@code true} if all arguments are good to go, {@code false}
+	 *            otherwise
+	 */
 	private static boolean parseArgs(String[] args)
 	{
 		if (args == null || args.length < 1)

@@ -1,11 +1,10 @@
 
-// -------------------------------------------------------------------------
 /**
- * This program is an implementation of Heapsort.
+ * Manages heap sorting according to the max-heap standards. Sorting time is
+ * recorded in {@code time}.
  * <p/>
- * @author Anthony Rinaldi
- * @author Ryan Merkel
- * @version November 5, 2012
+ * @author orionf22
+ * @author rinaldi1
  */
 public class HeapSorter
 {
@@ -21,30 +20,28 @@ public class HeapSorter
 	 */
 	private RecordCollection<HeapRecord> collection;
 
-	// ----------------------------------------------------------
 	/**
-	 * Constructor for the HeapSorter
+	 * Constructs a new {@code HeapSorter} using {@code collection}.
 	 * <p/>
-	 * @param collection
+	 * @param collection the interface between this sorter and the storage
+	 *                      medium
 	 */
 	public HeapSorter(RecordCollection<HeapRecord> collection)
 	{
 		this.collection = collection;
 	}
 
-	// ----------------------------------------------------------
 	/**
-	 * Returns the last sort's calculation time in milliseconds. Negative
-	 * implies no sort time.
+	 * Returns the last sorting time in milliseconds. A negative value implies
+	 * no sorting occurred.
 	 * <p/>
-	 * @return The sort time
+	 * @return the sort time
 	 */
 	public long getSortTime()
 	{
 		return time;
 	}
 
-	// ----------------------------------------------------------
 	/**
 	 * Sorts the heap.
 	 * <p/>
@@ -55,7 +52,8 @@ public class HeapSorter
 		// Get the initial time
 		long startTime = System.currentTimeMillis();
 
-		MaxHeap<HeapRecord> H = new MaxHeap<>(collection, collection.getLength(), collection.getLength());
+		MaxHeap<HeapRecord> H = new MaxHeap<>(collection, 
+				collection.getLength(), collection.getLength());
 		for (int i = 0; i < collection.getLength(); i++)
 		{
 			//removeMax places max at end of heap
@@ -66,6 +64,5 @@ public class HeapSorter
 		long endTime = System.currentTimeMillis();
 		// Calculate the total time
 		time = endTime - startTime;
-		heapsort.output.println("Final time in ms: " + time);
 	}
 }

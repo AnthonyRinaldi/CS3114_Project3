@@ -1,14 +1,14 @@
 
-import java.util.Arrays;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.util.LinkedList;
+import java.util.ListIterator;
 
 /**
  * {@code BufferPool} objects utilize a {@link LinkedList} to manage a set
- * number of {@link buffer} objects for the purposes of reading and writing data
+ * number of {@link Buffer} objects for the purposes of reading and writing data
  * from and to a given source file without having to make disk accesses. The
  * {@code BufferPool} allows portions of a source file to be kept in main memory
  * for faster I/O operations.
@@ -90,19 +90,19 @@ public class BufferPool
 
 	/**
 	 * Retrieves a byte array from the pool's source file, starting at position
-	 * {@code start} and ending at position {@code end}.
+	 * {@code start}. The returned array is always the size of
+	 * {@link IntegerCollection#RECORD_SIZE}. Bytes from the source are acquired
+	 * byte-by-byte from the right {@link Buffer}.
 	 * <p/>
 	 * @param start the location within the source from which to start reading
 	 *                 bytes
 	 * <p/>
-	 * @return a byte array containing the bytes from the source from
-	 *            {@code start} to {@code end}
+	 * @return a byte array containing the bytes from the source
 	 * <p/>
 	 * @throws IOException
 	 */
 	public byte[] get(int start) throws IOException
 	{
-		//heapsort.output.println("get from BufferPool");
 		byte[] ret = new byte[IntegerCollection.RECORD_SIZE];
 		int retIndex = 0;
 		for (int i = start; i < start + IntegerCollection.RECORD_SIZE; i++)
@@ -120,25 +120,29 @@ public class BufferPool
 	 * Sets {@code bytes} to a {@link Buffer}. This occurs when a change has
 	 * been made elsewhere and needs to be stored in the source. When bytes are
 	 * assigned to a {@link Buffer}, it is marked as {@code dirty} and will
-	 * result in the source's bytes changing to match {@code bytes}.
+	 * result in {@code bytes} overwriting the bytes in the corresponding
+	 * position in the source.
 	 * <p/>
-	 * {@code start} and {@code end} denote the location within the source at
-	 * which bytes will be overwritten by the information contained within
-	 * {@code bytes}. The two parameters are also used to retrieve the proper
-	 * {@link Buffer} from the pool.
+	 * {@code start} denotes the location within the source at which bytes will
+	 * be overwritten by the information contained within {@code bytes}.
+	 * {@code start} is also used to retrieve the proper {@link Buffer} from the
+	 * pool.
 	 * <p/>
 	 * @param bytes the bytes to assign to a {@link Buffer}
 	 * @param start the starting index in the source at which to overwrite
-	 * @param end   the ending index in the source at which to overwrite
 	 * <p/>
 	 * @throws IOException
 	 */
-	public void set(byte[] bytes, int start, int end) throws IOException
+	public void set(byte[] bytes, int start) throws IOException
 	{
-
+		//Determine which Buffer to get
 		int blockNum = start / BLOCK_SIZE;
 		Buffer buff = retrieve(blockNum, blockNum * BLOCK_SIZE);
 		int newStart = start;
+		//this check ensures the request index is always relative to the 
+		//Buffer's byte array, NOT the source's array. Without this check, a
+		//request to position 5000 (in Buffer 01) would result in a request in
+		//Buffer 01's byte array at 5000, generating an out of bounds exception
 		if (blockNum != 0)
 		{
 			newStart = start % BLOCK_SIZE;
@@ -164,6 +168,11 @@ public class BufferPool
 		}
 	}
 
+	/**
+	 * Closes the source file stream.
+	 * <p/>
+	 * @throws IOException
+	 */
 	public void closeSourceStream() throws IOException
 	{
 		file.close();
@@ -184,7 +193,6 @@ public class BufferPool
 	 * @param blockNum if the desired {@link Buffer} is already in the pool, the
 	 *                    {@link Buffer} with this number will be returned
 	 * @param start    the starting index in the source at which to read data
-	 * @param end      the ending index in the source at which to read data
 	 * <p/>
 	 * @return the desired {@link Buffer}
 	 * <p/>
@@ -193,12 +201,18 @@ public class BufferPool
 	 */
 	private Buffer retrieve(int blockNum, int start) throws IOException
 	{
+		//Iterate through the pool for speed gains (as opposed to using a 
+		//for-each loop
+		ListIterator<Buffer> iter = pool.listIterator();
 		//first search the pool for the right Buffer
-		for (Buffer buff : pool)
+		while (iter.hasNext())
 		{
+			Buffer buff = iter.next();
+			//Match!
 			if (buff.getNumber() == blockNum)
 			{
-				LRU(buff);
+				iter.remove();
+				pool.addFirst(buff);
 				CACHE_HITS++;
 				return buff;
 			}
@@ -209,12 +223,12 @@ public class BufferPool
 	}
 
 	/**
-	 * Adds a {@link Buffer} not already managed to the pool using the Least
-	 * Recently Used scheme. If the pool is not full, then the desired
+	 * Adds a {@link Buffer} not already managed to the pool using the <b>Least
+	 * Recently Used scheme</b>. If the pool is not full, then the desired
 	 * {@link Buffer} is simply added to the front of the list. Otherwise the
-	 * last {@link Buffer} is removed from the list and the new one added to the
-	 * front. If the removed {@link Buffer} is marked as {@code dirty}, then
-	 * bytes in the source are modified.
+	 * last {@link Buffer} is removed from the list and recycled as the "new"
+	 * one and added to the front. If the removed {@link Buffer} is marked as
+	 * {@code dirty}, then bytes in the source are modified.
 	 * <p/>
 	 * As this method is only invoked when a desired {@link Buffer} is not in
 	 * the pool, a {@code cache miss} occurs.
@@ -222,8 +236,6 @@ public class BufferPool
 	 * <p/>
 	 * @param blockNum the number of the desired {@link Buffer}
 	 * @param start    the starting index (within the source) of the new
-	 *                    {@link Buffer Buffer's} bytes
-	 * @param end      the ending index (within the source) of the new
 	 *                    {@link Buffer Buffer's} bytes
 	 * <p/>
 	 * @return the new {@link Buffer} added to the pool
@@ -233,69 +245,59 @@ public class BufferPool
 	 */
 	private Buffer addBuffer(int blockNum, int start) throws IOException
 	{
-		//create the new Buffer
-		Buffer buff = new Buffer(blockNum, getBytesFromFile(start));
+		Buffer buff;
 		//if the pool is full, remove the last Buffer, setting bytes if the
 		//Buffer is dirty
 		if (size == POOL_COUNT)
 		{
-			Buffer removed = pool.removeLast();
-			if (removed.isDirty())
+			buff = pool.removeLast();
+			if (buff.isDirty())
 			{
-				setBytesInFile(removed.bytes(), removed.getNumber() * BLOCK_SIZE);
-				removed.clean();
+				setBytesInFile(buff.bytes(), buff.getNumber() * BLOCK_SIZE);
+				buff.clean();
 			}
 			//decrement size, knowing it will be incremented next anyway. This
 			//is done so the size is always incremented properly; if the pool is
 			//not full then size still needs to be incremented when a new Buffer
 			//is added
 			size--;
+			//reuse this Buffer and its byte array rather than allocating a new 
+			//array
+			getBytesFromFile(buff.bytes(), start);
+			buff.setNumber(blockNum);
+		}
+		//the pool is not full so a new Buffer is needed
+		else
+		{
+			buff = new Buffer(blockNum,
+					getBytesFromFile(new byte[BLOCK_SIZE], start));
 		}
 		size++;
-		pool.add(buff);
+		pool.addFirst(buff);
 		CACHE_MISSES++;
 		return buff;
 	}
 
 	/**
-	 * Moves {@code buff} to the front of the pool using the Least Recently Used
-	 * scheme. As this method is only called when a {@link Buffer} is needed and
-	 * that {@link Buffer} is already in the pool, this method simply moves that
-	 * {@link Buffer} to the front of the list.
-	 * <p/>
-	 * @param buff
-	 */
-	private void LRU(Buffer buff)
-	{
-		pool.remove(buff);
-		pool.add(buff);
-	}
-
-	/**
-	 * Retrieves a byte array from the source starting at {@code start} and
-	 * ending at {@code end}. Data is read from disk in this method as bytes are
+	 * Retrieves a bytes from the source starting at {@code start} and placed
+	 * into {@code ret}. Data is read from disk in this method as bytes are
 	 * accessed directly from the source file (stored on disk).
 	 * {@link BufferPool#DISK_READS DISK_READS} is incremented.
 	 * <p/>
+	 * A byte array is used from elsewhere (as {@code ret}) rather than
+	 * allocating a new array of size {@link BufferPool#BLOCK_SIZE BLOCK_SIZE}.
+	 * <p/>
 	 * @param start the starting index at which to acquire bytes from the source
-	 * @param end   the ending index at which to acquire bytes from the source
 	 * <p/>
 	 * @return the acquired bytes from the source
 	 * <p/>
 	 * @throws IOException
 	 */
-	private byte[] getBytesFromFile(int start) throws IOException
+	private byte[] getBytesFromFile(byte[] ret, int start) throws IOException
 	{
 		//navigate to the right position in the source
 		file.seek(start);
-		//allocate byte array
-		byte[] ret = new byte[BLOCK_SIZE];
-		int retIndex = 0;
-		for (int i = start; i < start + BLOCK_SIZE; i++)
-		{
-			ret[retIndex] = file.readByte();
-			retIndex++;
-		}
+		file.read(ret, 0, BLOCK_SIZE);
 		DISK_READS++;
 		return ret;
 	}

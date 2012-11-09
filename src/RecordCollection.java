@@ -29,15 +29,6 @@ public interface RecordCollection<E>
 	 */
 	public void set(E element, int recordNum);
 
-	/**
-	 * Swaps the element at {@code first} with the element at {@code second}.
-	 *
-	 * @param first the index of the element to swap
-	 * @param second the index of the element to swap {@code first} with
-	 */
-	//public void swap(int first, int second);
-
-    // ----------------------------------------------------------
     /**
      * Get the number of records in the collection
      * @return
