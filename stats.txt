@@ -1,4 +1,13 @@
+<<<<<<< HEAD
 txt.txt, with 2 blocks and 12 buffers
 Cache hits: 396  Cache misses: 2  
+=======
+txt.txt, with 2 blocks and 2 buffers
+Cache hits: 352  Cache misses: 2  
+Disk Reads:   2  Disk Writes:  2  
+Time: 6
+txt.txt, with 2 blocks and 2 buffers
+Cache hits: 352  Cache misses: 2  
+>>>>>>> 56732ac68681250c6516f30de21b11c7b9da1470
 Disk Reads:   2  Disk Writes:  2  
 Time: 8
