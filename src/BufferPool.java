@@ -151,8 +151,7 @@ public class BufferPool
 	}
 
 	/**
-	 * Flushes all {@link Buffers} in the pool and closes the source file
-	 * stream.
+	 * Flushes all {@link Buffers} in the pool.
 	 * <p/>
 	 * @throws IOException
 	 */
@@ -166,6 +165,10 @@ public class BufferPool
 				buff.clean();
 			}
 		}
+	}
+	
+	public void closeSourceStream() throws IOException
+	{
 		file.close();
 	}
 

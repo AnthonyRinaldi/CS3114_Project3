@@ -110,6 +110,7 @@ public class heapsort
 			pool.flush();
 			writeStats();
 			reportBlockLeaders();
+			pool.closeSourceStream();
 		}
 		output.println("End Program");
 	}
