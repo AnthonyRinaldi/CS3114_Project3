@@ -30,6 +30,7 @@ public class IntegerCollection
 	 */
 	private BufferPool pool;
 	private long length;
+	private long originalSourceLength;
 	/**
 	 * The static size of managed records, in bytes. For Project 3, this is 4.
 	 */
@@ -47,6 +48,7 @@ public class IntegerCollection
 	{
 		this.pool = p;
 		this.length = length / RECORD_SIZE;
+		this.originalSourceLength = length;
 	}
 
 	@Override
@@ -142,15 +144,15 @@ public class IntegerCollection
 	 */
 	public HeapRecord[] getBlockLeaders()
 	{
-		int fileLength = (int) length;
-		int numBlocks = (int) (length / BufferPool.BLOCK_SIZE);
+		int numBlocks = (int) (originalSourceLength / BufferPool.BLOCK_SIZE);
 		if (numBlocks == 0)
 		{
 			numBlocks = 1;
 		}
+		//System.out.println("\t" + numBlocks);
 		HeapRecord[] ret = new HeapRecord[numBlocks];
 		int retIndex = 0;
-		for (int i = 0; i < fileLength; i += BufferPool.BLOCK_SIZE)
+		for (int i = 0; i < originalSourceLength; i += BufferPool.BLOCK_SIZE)
 		{
 			try
 			{

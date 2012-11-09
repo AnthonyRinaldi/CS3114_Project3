@@ -208,6 +208,7 @@ public class heapsort
 		int eigth = 1;
 		for (int i = 0; i < leaders.length; i++)
 		{
+			System.out.println("\t" + i + "; " + leaders.length);
 			HeapRecord curr = leaders[i];
 			output.printf("%d %d  ", curr.getKey(), curr.getValue());
 			eigth++;

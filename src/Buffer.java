@@ -62,7 +62,6 @@ public class Buffer
 	 */
 	public void setBytes(byte[] b, int start)
 	{
-	    heapsort.output.println("Old: " + Arrays.toString(b));
 		int bIndex = 0;
 		int size = b.length;
 		for (int i = start; i < start + size; i++)
@@ -70,7 +69,6 @@ public class Buffer
 			bytes[i] = b[bIndex];
 			bIndex++;
 		}
-		heapsort.output.println("New: " + Arrays.toString(b));
 	}
 
 	/**

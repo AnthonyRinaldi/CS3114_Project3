@@ -121,3 +121,43 @@ Cache hits: 391  Cache misses: 41
 Disk Reads:  41  Disk Writes:  19  
 Time: 7
 
+tiny.txt, with 256 blocks and 5 buffers
+Cache hits: 186,877  Cache misses: 50,159  
+Disk Reads:  50,159  Disk Writes:  16,274  
+Time: 6088
+
+next.txt, with 0 blocks and 5 buffers
+Cache hits: 0  Cache misses: 0  
+Disk Reads: 0  Disk Writes:  0  
+Time: 2
+
+next.txt, with 10 blocks and 20 buffers
+Cache hits: 3,157,818  Cache misses: 10  
+Disk Reads:        10  Disk Writes:  10  
+Time: 567
+
+next.txt, with 10 blocks and 20 buffers
+Cache hits: 3,157,818  Cache misses: 10  
+Disk Reads:        10  Disk Writes:  10  
+Time: 511
+
+next.txt, with 10 blocks and 20 buffers
+Cache hits: 3,157,818  Cache misses: 10  
+Disk Reads:        10  Disk Writes:  10  
+Time: 646
+
+next.txt, with 10 blocks and 20 buffers
+Cache hits: 2,908,576  Cache misses: 10  
+Disk Reads:        10  Disk Writes:  10  
+Time: 564
+
+next.txt, with 10 blocks and 20 buffers
+Cache hits: 3,157,818  Cache misses: 10  
+Disk Reads:        10  Disk Writes:  10  
+Time: 512
+
+next.txt, with 10 blocks and 20 buffers
+Cache hits: 3,157,818  Cache misses: 10  
+Disk Reads:        10  Disk Writes:  10  
+Time: 598
+

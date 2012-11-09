@@ -63,7 +63,7 @@ public class BufferPool
 	 * The static size of blocks within the source, in bytes. For Project 3,
 	 * this is 4096.
 	 */
-	public static final int BLOCK_SIZE = 16;
+	public static final int BLOCK_SIZE = 4096;
 
 	/**
 	 * Constructs a new {@code BufferPool} with space for {@code numBuffers}
