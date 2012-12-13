@@ -161,3 +161,13 @@ Cache hits: 3,157,818  Cache misses: 10
 Disk Reads:        10  Disk Writes:  10  
 Time: 598
 
+next.txt, with 10 blocks and 7 buffers
+Cache hits: 3,165,991  Cache misses: 127  
+Disk Reads:       127  Disk Writes:  121  
+Time: 323
+
+next.txt, with 10 blocks and 7 buffers
+Cache hits: 2,920,585  Cache misses: 91  
+Disk Reads:        91  Disk Writes:  91  
+Time: 354
+
